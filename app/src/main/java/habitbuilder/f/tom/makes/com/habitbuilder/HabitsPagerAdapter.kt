@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 
-val NUM_FRAGS= 5
+val NUM_FRAGS= 10
 
 class HabitsPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {
 
@@ -15,5 +15,9 @@ class HabitsPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {
 
     override fun getCount(): Int {
         return NUM_FRAGS
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return "Habit $position"
     }
 }
