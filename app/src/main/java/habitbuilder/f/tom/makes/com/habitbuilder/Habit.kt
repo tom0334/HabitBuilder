@@ -1,5 +1,7 @@
 package habitbuilder.f.tom.makes.com.habitbuilder
 
+import java.sql.Timestamp
+
 
 data class HabitTimeStamp(val time: Long)
 
@@ -22,6 +24,10 @@ class Habit(
 
     fun checkData(){
         timeStamps.sortBy { it.time }
+    }
+
+    fun getTimeStamps(): List<HabitTimeStamp>{
+        return this.timeStamps.toList()
     }
 
     fun addTimeStamp(stamp:HabitTimeStamp){
