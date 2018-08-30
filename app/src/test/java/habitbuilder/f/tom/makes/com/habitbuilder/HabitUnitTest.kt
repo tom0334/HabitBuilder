@@ -7,9 +7,7 @@ import org.junit.Before
 import java.util.*
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * Unit Tests for the habit class
  */
 class HabitUnitTest {
 
@@ -51,16 +49,45 @@ class HabitUnitTest {
         Assert.assertEquals(orderedTestDates[0].timeInMillis, hab.getTimeStamps()[0].time)
     }
 
+
+    //these tests are for the score function
     @Test
-    fun testScoreZero(){
-        Assert.assertEquals(0f, hab.scoreUptoTimeStamp(lastTime))
+    fun testScoreEmptyDataset(){
+        Assert.assertEquals(0f, hab.timesPerDayUptoTimeStamp(lastTime))
     }
 
     @Test
     fun testScoreOne(){
         hab.addTimeStamp(HabitTimeStamp( orderedTestDates[1].timeInMillis))
-        Assert.assertEquals(1f, hab.scoreUptoTimeStamp(lastTime))
+        Assert.assertEquals(1f, hab.timesPerDayUptoTimeStamp(lastTime))
     }
+
+    @Test
+    fun testScoreTwoDays(){
+        hab.addTimeStamp(HabitTimeStamp( orderedTestDates[0].timeInMillis))
+        //two days, only did the habit once. So the score should be 0.5
+        Assert.assertEquals(0.5f, hab.timesPerDayUptoTimeStamp(lastTime))
+    }
+
+
+
+
+    //these tests are for the inverse function, the amount of days per time:
+    @Test
+    fun testScoreInverse(){
+        hab.addTimeStamp(HabitTimeStamp( orderedTestDates[0].timeInMillis))
+        //two days, only did the habit once. So it happens once every two days
+        Assert.assertEquals(2f, hab.daysPerTimeUpToTimeStamp(lastTime))
+    }
+
+    @Test
+    fun testScoreInverseZeroTimePassed(){
+        //the only timestamp is the same as the timeSince
+        hab.addTimeStamp(HabitTimeStamp( lastTime))
+        Assert.assertEquals(0f, hab.daysPerTimeUpToTimeStamp(lastTime))
+    }
+
+
 
 
 
@@ -69,6 +96,7 @@ class HabitUnitTest {
 
 }
 
+//just a dummy 'implementation' for testing
 class DummySaver: HabitDatabase{
     override fun save(habit: Habit) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
