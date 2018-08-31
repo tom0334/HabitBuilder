@@ -1,6 +1,7 @@
 package habitbuilder.f.tom.makes.com.habitbuilder
 
 import android.content.Context
+import android.util.Log
 import com.snappydb.DB
 import com.snappydb.DBFactory
 
@@ -9,7 +10,7 @@ val HABIT_BASE_KEY= "Habit:"
 
 class SnappyHabitSaver(context:Context) : HabitDatabase {
 
-    val db: DB
+    private val db: DB
 
     init {
         db = DBFactory.open(context, DB_NAME)
@@ -17,6 +18,7 @@ class SnappyHabitSaver(context:Context) : HabitDatabase {
 
     override fun save(habit: Habit) {
         db.put(habit.id, habit)
+        Log.i("SnappyHabitSaver", "Saved habit: ${habit}")
     }
 
     override fun generateNewHabitId(): String{

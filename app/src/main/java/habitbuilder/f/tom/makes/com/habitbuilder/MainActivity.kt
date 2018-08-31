@@ -11,6 +11,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        val saver = SnappyHabitSaver(this)
+        val habit = Habit(
+                saver.generateNewHabitId(),
+                "Test Habit",
+                3
+        )
+        saver.save(habit)
+
         //prepare the viewpager
         val adapter = HabitsPagerAdapter(this.supportFragmentManager)
         val pager = findViewById<ViewPager>(R.id.mainPager)
@@ -18,6 +27,9 @@ class MainActivity : AppCompatActivity() {
 
         val tabLayout = findViewById<TabLayout>(R.id.mainTabLayout)
         tabLayout.setupWithViewPager(pager)
+
+
+
 
     }
 
