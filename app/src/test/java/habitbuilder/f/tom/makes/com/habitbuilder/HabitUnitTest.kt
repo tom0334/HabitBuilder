@@ -11,7 +11,7 @@ import java.util.*
  */
 class HabitUnitTest {
 
-    var hab = Habit(UUID.randomUUID().toString(),"HabitName",2,DummySaver())
+    var hab = Habit(0,"HabitName",2)
 
     val orderedTestDates = listOf(
             GregorianCalendar(2018,1,4),
@@ -23,7 +23,7 @@ class HabitUnitTest {
 
     @Before
     fun prepare(){
-        hab = Habit(UUID.randomUUID().toString(),"HabitName",2,DummySaver())
+        hab = Habit(0,"HabitName",2)
     }
 
     //checks if the list of timestamps is in the correct order
@@ -34,9 +34,9 @@ class HabitUnitTest {
             hab.addTimeStamp(HabitTimeStamp( date.timeInMillis))
         }
         //check that they are still in order
-        Assert.assertEquals(orderedTestDates[0].timeInMillis, hab.getTimeStamps()[0].time)
-        Assert.assertEquals(orderedTestDates[1].timeInMillis, hab.getTimeStamps()[1].time)
-        Assert.assertEquals(orderedTestDates[2].timeInMillis, hab.getTimeStamps()[2].time)
+        Assert.assertEquals(orderedTestDates[0].timeInMillis, hab.timeStamps[0].time)
+        Assert.assertEquals(orderedTestDates[1].timeInMillis, hab.timeStamps[1].time)
+        Assert.assertEquals(orderedTestDates[2].timeInMillis, hab.timeStamps[2].time)
     }
 
 
@@ -46,7 +46,7 @@ class HabitUnitTest {
         hab.addTimeStamp(HabitTimeStamp(orderedTestDates[1].timeInMillis))
         hab.addTimeStamp(HabitTimeStamp( orderedTestDates[0].timeInMillis))
 
-        Assert.assertEquals(orderedTestDates[0].timeInMillis, hab.getTimeStamps()[0].time)
+        Assert.assertEquals(orderedTestDates[0].timeInMillis, hab.timeStamps[0].time)
     }
 
 
@@ -87,26 +87,4 @@ class HabitUnitTest {
         Assert.assertEquals(0f, hab.daysPerTimeUpToTimeStamp(lastTime))
     }
 
-
-
-
-
-
-
-
-}
-
-//just a dummy 'implementation' for testing
-class DummySaver: HabitDatabase{
-    override fun save(habit: Habit) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun loadAll(): List<Habit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun load(id: String): Habit {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }
