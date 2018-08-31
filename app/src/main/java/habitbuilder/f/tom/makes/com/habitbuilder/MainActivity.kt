@@ -20,6 +20,9 @@ class MainActivity : AppCompatActivity() {
         )
         saver.save(habit)
 
+
+        val all = saver.loadAll()
+
         //prepare the viewpager
         val adapter = HabitsPagerAdapter(this.supportFragmentManager)
         val pager = findViewById<ViewPager>(R.id.mainPager)
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
         val tabLayout = findViewById<TabLayout>(R.id.mainTabLayout)
         tabLayout.setupWithViewPager(pager)
+
+
 
 
 

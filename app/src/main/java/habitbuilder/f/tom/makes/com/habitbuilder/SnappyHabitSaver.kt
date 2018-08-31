@@ -2,6 +2,7 @@ package habitbuilder.f.tom.makes.com.habitbuilder
 
 import android.content.Context
 import android.util.Log
+import com.google.gson.Gson
 import com.snappydb.DB
 import com.snappydb.DBFactory
 
@@ -17,7 +18,8 @@ class SnappyHabitSaver(context:Context) : HabitDatabase {
     }
 
     override fun save(habit: Habit) {
-        db.put(habit.id, habit)
+        val json = Gson().toJson(habit)
+        db.put(habit.id, json)
         Log.i("SnappyHabitSaver", "Saved habit: ${habit}")
     }
 
@@ -30,11 +32,19 @@ class SnappyHabitSaver(context:Context) : HabitDatabase {
     }
 
     override fun loadAll(): List<Habit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val keys = db.findKeys(HABIT_BASE_KEY)
+        val result = mutableListOf<Habit>()
+        val gson = Gson()
+        for (key in keys){
+            val json  = db.get(key)
+            val obj = gson.fromJson(json, Habit::class.java)
+            result.add(obj)
+        }
+        return  result
     }
 
     override fun load(id: String): Habit {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return db.getObject(id,Habit::class.java)
     }
 
     override fun close() {
