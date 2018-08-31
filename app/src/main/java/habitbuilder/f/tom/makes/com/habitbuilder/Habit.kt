@@ -7,12 +7,14 @@ interface HabitDatabase{
     fun save(habit:Habit)
     fun loadAll():List<Habit>
     fun load(id:String):Habit
+    fun generateNewHabitId(): String
+    fun close()
 }
 
 val SECONDS_IN_DAY = 86400
 
 data class Habit(
-        val id:Int,
+        val id:String,
         var name: String,
         var goal: Int,
         val timeStamps: MutableList<HabitTimeStamp> = mutableListOf<HabitTimeStamp>()

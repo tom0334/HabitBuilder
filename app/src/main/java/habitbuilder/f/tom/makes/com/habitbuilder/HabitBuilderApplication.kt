@@ -5,6 +5,7 @@ import android.util.Log
 import com.snappydb.DBFactory
 import com.snappydb.DB
 
+val DB_NAME = "HABITS_DB"
 
 val DB_VERSION_KEY = "VERSION"
 val DB_VERSION_NUM = 0
@@ -13,7 +14,7 @@ class HabitBuilderApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val snappydb = DBFactory.open(applicationContext,"habitsDb")
+        val snappydb = DBFactory.open(applicationContext, DB_NAME)
 
         if(!snappydb.exists(DB_VERSION_KEY)  || snappydb.getInt(DB_VERSION_KEY) != DB_VERSION_NUM){
             snappydb.putInt(DB_VERSION_KEY, DB_VERSION_NUM)
