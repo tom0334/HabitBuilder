@@ -4,7 +4,7 @@ package habitbuilder.f.tom.makes.com.habitbuilder
 data class HabitTimeStamp(val time: Long)
 
 interface HabitDatabase{
-    fun save(habit:Habit)
+    fun saveOrUpdate(habit:Habit)
     fun loadAll():List<Habit>
     fun load(id:String):Habit
 }

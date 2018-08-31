@@ -98,7 +98,7 @@ class HabitUnitTest {
 
 //just a dummy 'implementation' for testing
 class DummySaver: HabitDatabase{
-    override fun save(habit: Habit) {
+    override fun saveOrUpdate(habit: Habit) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
