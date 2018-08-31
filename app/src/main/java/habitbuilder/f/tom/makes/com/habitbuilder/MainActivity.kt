@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         val all = saver.loadAll()
 
         //prepare the viewpager
-        val adapter = HabitsPagerAdapter(this.supportFragmentManager)
+        val adapter = HabitsPagerAdapter(this.supportFragmentManager, all)
         val pager = findViewById<ViewPager>(R.id.mainPager)
         pager.adapter = adapter
 

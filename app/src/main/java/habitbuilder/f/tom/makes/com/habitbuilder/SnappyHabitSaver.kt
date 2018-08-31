@@ -11,11 +11,8 @@ val HABIT_BASE_KEY= "Habit:"
 
 class SnappyHabitSaver(context:Context) : HabitDatabase {
 
-    private val db: DB
-
-    init {
-        db = DBFactory.open(context, DB_NAME)
-    }
+    private val gson = Gson()
+    private val db: DB = DBFactory.open(context, DB_NAME)
 
     override fun save(habit: Habit) {
         val json = Gson().toJson(habit)
@@ -34,17 +31,18 @@ class SnappyHabitSaver(context:Context) : HabitDatabase {
     override fun loadAll(): List<Habit> {
         val keys = db.findKeys(HABIT_BASE_KEY)
         val result = mutableListOf<Habit>()
-        val gson = Gson()
         for (key in keys){
             val json  = db.get(key)
             val obj = gson.fromJson(json, Habit::class.java)
             result.add(obj)
         }
+
         return  result
     }
 
     override fun load(id: String): Habit {
-        return db.getObject(id,Habit::class.java)
+        val json  = db.get(id)
+        return gson.fromJson(json, Habit::class.java)
     }
 
     override fun close() {
