@@ -7,26 +7,22 @@ interface HabitDatabase{
     fun save(habit:Habit)
     fun loadAll():List<Habit>
     fun load(id:String):Habit
+    fun generateNewHabitId(): String
+    fun close()
 }
 
-
-val SECONDS_IN_YEAR = 31556926
 val SECONDS_IN_DAY = 86400
 
-class Habit(
+data class Habit(
         val id:String,
         var name: String,
         var goal: Int,
-        val saver: HabitDatabase
-        ){
-    private val timeStamps = mutableListOf<HabitTimeStamp>()
+        val timeStamps: MutableList<HabitTimeStamp> = mutableListOf<HabitTimeStamp>()
+        )
+{
 
     fun checkData(){
         timeStamps.sortBy { it.time }
-    }
-
-    fun getTimeStamps(): List<HabitTimeStamp>{
-        return this.timeStamps.toList()
     }
 
     fun addTimeStamp(stamp:HabitTimeStamp){
