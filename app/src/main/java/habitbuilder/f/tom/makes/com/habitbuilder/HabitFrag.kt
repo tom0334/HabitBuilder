@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_habit.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -47,6 +48,11 @@ class HabitFrag : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        addClickListeners()
+        showData()
+    }
+
+    fun showData(){
         val timesToday = habit.timesOnDay(System.currentTimeMillis(),TimeUtilsJvm())
 
         if(habit.archievedGoalToday(timesToday)){
@@ -55,6 +61,14 @@ class HabitFrag : Fragment() {
             habitFrag_goalTv.text = getString(R.string.habitfrag_goalNotReached, habit.goal)
         }
         habitFrag_amountTv.text = timesToday.toString()
+    }
+
+    private fun addClickListeners() {
+        habitFrag_justNowButton.setOnClickListener {
+            Toast.makeText(this.context,"Great!",Toast.LENGTH_LONG).show()
+            habit.addTimeStamp(HabitTimeStamp(System.currentTimeMillis()))
+            showData()
+        }
     }
 
 

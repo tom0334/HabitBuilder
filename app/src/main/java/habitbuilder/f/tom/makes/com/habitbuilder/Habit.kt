@@ -75,9 +75,9 @@ data class Habit(
     //when null is passed, it will be calculated
     fun archievedGoalToday(timesToday:Int):Boolean{
         if(positive){
-            return timesToday > goal
+            return timesToday >= goal
         }else{
-            return timesToday < goal
+            return timesToday <= goal
         }
     }
 
