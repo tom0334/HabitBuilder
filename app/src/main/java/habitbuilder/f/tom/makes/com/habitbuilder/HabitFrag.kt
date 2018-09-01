@@ -6,7 +6,10 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_habit.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 private val PARAM_ONE_ID = "PARAM_1"
 private val PARAM_TWO_ID = "PARAM_2"
@@ -18,22 +21,33 @@ class HabitFrag : Fragment() {
 
     //Primitives cannot be lateinit
     private var indexInViewPager: Int = -1
-    private var  habitId: String = ""
+    private lateinit var habitId: String
+    private lateinit var habit: Habit
+    private lateinit var saver: SnappyHabitSaver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.indexInViewPager = arguments?.get(PARAM_ONE_ID) as Int?  ?: throw IllegalArgumentException("Could not get argument one!")
-        this.habitId = arguments?.get(PARAM_TWO_ID) as String? ?: throw IllegalArgumentException("Could not get argument two!")
-    }
+        require(arguments!=null)
+        require(context!=null)
 
+        val args:Bundle = arguments!!
+        this.indexInViewPager = args.getInt(PARAM_ONE_ID)
+        this.habitId = args.getString(PARAM_TWO_ID)
+        this.saver = SnappyHabitSaver(context!!)
+        this.habit = saver.load(habitId)
+
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_habit, container, false)
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
     }
 
 

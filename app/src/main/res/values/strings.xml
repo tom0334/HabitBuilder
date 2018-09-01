@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">HabitBuilder</string>
     <string name="menu_main_create_habit">Create Habit</string>
+    <string name="habitfrag_goalReached">You reached your goal of %1$d. Amount today:</string>
 </resources>

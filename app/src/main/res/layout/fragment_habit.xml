@@ -15,16 +15,18 @@
         android:textSize="48sp" />
 
     <TextView
+        android:id="@+id/habitFrag_goalTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="8dp"
-        android:text="You acomplished your goal of 3. Amount today:"
+        android:text="@string/habitfrag_goalReached"
         android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/habitFrag_amountTv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -36,6 +38,7 @@
 
 
     <TextView
+        android:id="@+id/habitFrag_historyTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -43,6 +46,7 @@
         android:text="Last week: 0.7, all time: 0.8" />
 
     <TextView
+        android:id="@+id/habitFrag_betterOrWorseTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
