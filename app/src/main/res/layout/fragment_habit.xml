@@ -18,8 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:paddingTop="8dp"
-        android:text="You acomplished your goal of 3. You did it"
+        android:text="You acomplished your goal of 3. Amount today:"
         android:textSize="16sp" />
 
     <TextView
@@ -29,8 +31,24 @@
         android:autoSizeMaxTextSize="196sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:padding="32dp"
+        android:padding="16dp"
         android:text="16" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Last week: 0.7, all time: 0.8" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="You are doing worse this week, get it up!" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,16 +58,17 @@
         <Button
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
             android:text="I did it a while ago..." />
+
         <Button
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
             android:text="Edit previous times" />
@@ -60,7 +79,7 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="32dp"
+        android:padding="24dp"
         android:text="I did it just now"
         android:textSize="32sp" />
 
