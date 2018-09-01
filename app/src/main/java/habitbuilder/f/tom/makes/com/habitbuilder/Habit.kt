@@ -19,6 +19,7 @@ data class Habit(
         val id:String,
         var name: String,
         var goal: Int,
+        val positive:Boolean = true,
         val timeStamps: MutableList<HabitTimeStamp> = mutableListOf()
         )
 {
@@ -69,6 +70,15 @@ data class Habit(
     fun daysPerTimeInPeriod(from:Long, upTo: Long):Float{
         val otherResult = avgScoreInPeriod(from,upTo)
         return if (otherResult==0F) 0F else 1f/otherResult
+    }
+
+    //when null is passed, it will be calculated
+    fun archievedGoalToday(timesToday:Int):Boolean{
+        if(positive){
+            return timesToday > goal
+        }else{
+            return timesToday < goal
+        }
     }
 
 

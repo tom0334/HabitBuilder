@@ -47,7 +47,14 @@ class HabitFrag : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
+        val timesToday = habit.timesOnDay(System.currentTimeMillis(),TimeUtilsJvm())
+
+        if(habit.archievedGoalToday(timesToday)){
+            habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
+        }else{
+            habitFrag_goalTv.text = getString(R.string.habitfrag_goalNotReached, habit.goal)
+        }
+        habitFrag_amountTv.text = timesToday.toString()
     }
 
 
