@@ -19,6 +19,7 @@ class HabitUnitTest {
             GregorianCalendar(2018,1,6)
     )
 
+    val firstTime = orderedTestDates.first().timeInMillis
     val lastTime = orderedTestDates.last().timeInMillis
 
     @Before
@@ -53,20 +54,23 @@ class HabitUnitTest {
     //these tests are for the score function
     @Test
     fun testScoreEmptyDataset(){
-        Assert.assertEquals(0f, hab.timesPerDayUptoTimeStamp(lastTime))
+        Assert.assertEquals(0f, hab.avgScoreInPeriod(firstTime,lastTime))
     }
 
+
+    //this test contains the scenario where it is exactly one day after having done the habit once
     @Test
     fun testScoreOne(){
-        hab.addTimeStamp(HabitTimeStamp( orderedTestDates[1].timeInMillis))
-        Assert.assertEquals(1f, hab.timesPerDayUptoTimeStamp(lastTime))
+        hab.addTimeStamp(HabitTimeStamp(firstTime))
+        Assert.assertEquals(1f, hab.avgScoreInPeriod(firstTime,orderedTestDates[1].timeInMillis))
     }
 
+    //exactly two days after adding the first data point
     @Test
     fun testScoreTwoDays(){
-        hab.addTimeStamp(HabitTimeStamp( orderedTestDates[0].timeInMillis))
+        hab.addTimeStamp(HabitTimeStamp(firstTime))
         //two days, only did the habit once. So the score should be 0.5
-        Assert.assertEquals(0.5f, hab.timesPerDayUptoTimeStamp(lastTime))
+        Assert.assertEquals(0.5f, hab.avgScoreInPeriod(firstTime,lastTime))
     }
 
 
@@ -77,14 +81,14 @@ class HabitUnitTest {
     fun testScoreInverse(){
         hab.addTimeStamp(HabitTimeStamp( orderedTestDates[0].timeInMillis))
         //two days, only did the habit once. So it happens once every two days
-        Assert.assertEquals(2f, hab.daysPerTimeUpToTimeStamp(lastTime))
+        Assert.assertEquals(2f, hab.daysPerTimeInPeriod(firstTime,lastTime))
     }
 
     @Test
     fun testScoreInverseZeroTimePassed(){
         //the only timestamp is the same as the timeSince
         hab.addTimeStamp(HabitTimeStamp( lastTime))
-        Assert.assertEquals(0f, hab.daysPerTimeUpToTimeStamp(lastTime))
+        Assert.assertEquals(0f, hab.daysPerTimeInPeriod(lastTime,lastTime))
     }
 
 }
