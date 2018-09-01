@@ -34,8 +34,6 @@ class HabitFrag : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val tv = view.findViewById<TextView>(R.id.habitFragText)
-        tv.text= "Hello from Fragment ${this.indexInViewPager}. The habitId is $habitId"
     }
 
 
