@@ -64,4 +64,9 @@ class MainActivity : AppCompatActivity() {
         return true //consume the event
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        saver.close()
+    }
+
 }

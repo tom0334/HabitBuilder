@@ -67,6 +67,7 @@ class HabitFrag : Fragment() {
         habitFrag_justNowButton.setOnClickListener {
             Toast.makeText(this.context,"Great!",Toast.LENGTH_LONG).show()
             habit.addTimeStamp(HabitTimeStamp(System.currentTimeMillis()))
+            saver.save(habit)
             showData()
         }
     }
@@ -81,6 +82,11 @@ class HabitFrag : Fragment() {
             f.arguments = args
             return f
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        saver.close()
     }
 
 
