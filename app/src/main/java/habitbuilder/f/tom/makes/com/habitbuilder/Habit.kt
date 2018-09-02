@@ -81,5 +81,16 @@ data class Habit(
         }
     }
 
+    fun avgScoreThisWeek(now: Long, timeUtils: TimeUtils): Float {
+        val start = timeUtils.oneWeekAgo(now)
+        return avgScoreInPeriod(start, now)
+    }
+
+    fun avgScoreThisMonth(now: Long, timeUtils: TimeUtils): Float {
+        val start = timeUtils.oneMonthAgo(now)
+        return avgScoreInPeriod(start, now)
+    }
+
+
 
 }

@@ -53,6 +53,8 @@ class HabitFrag : Fragment() {
     }
 
     fun showData(){
+        val timeUtils = TimeUtilsJvm()
+
         val timesToday = habit.timesOnDay(System.currentTimeMillis(),TimeUtilsJvm())
 
         if(habit.archievedGoalToday(timesToday)){
@@ -63,6 +65,12 @@ class HabitFrag : Fragment() {
             habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!,R.color.my_material_red))
         }
         habitFrag_amountTv.text = timesToday.toString()
+
+        val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
+        val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
+        val scoreAllTime = habit.avgScoreInPeriod(0,System.currentTimeMillis())
+
+        habitFrag_historyTv.text = getString(R.string.habitfrag_historyText, scoreThisWeek,scoreThisMonth,scoreAllTime)
     }
 
     private fun addClickListeners() {
