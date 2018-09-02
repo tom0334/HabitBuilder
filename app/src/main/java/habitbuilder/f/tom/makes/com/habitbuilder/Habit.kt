@@ -33,13 +33,19 @@ data class Habit(
         checkData()
     }
 
-    fun avgScoreInPeriod(start: Long, upTo:Long):Float{
+    /**
+     * Returns the average amount of times this habit was completed in the period between start and upTo
+     *
+     * If clampToFirst is enabled, the start time will be moved to the first time this habit has been completed.
+     */
+    fun avgScoreInPeriod(start: Long, upTo:Long, clampStartToFirst:Boolean = false):Float{
         require(upTo>= start)
 
         if(timeStamps.size==0) return 0F
 
-        //the starttime can be the startTime Passed as argument, or the first ever recorded
-        val passedMillis= upTo - max(timeStamps[0].time, start)
+        //the starttime can be the startTime Passed as argument, or the first ever recorded if clamping is enabled
+        val startCountingAt= if (clampStartToFirst) max(timeStamps[0].time, start) else start
+        val passedMillis= upTo - startCountingAt
         if (passedMillis==0L) return 0F
 
         //passed days is a float (2 days 12 hours is 2,5 days)
@@ -89,6 +95,11 @@ data class Habit(
     fun avgScoreThisMonth(now: Long, timeUtils: TimeUtils): Float {
         val start = timeUtils.oneMonthAgo(now)
         return avgScoreInPeriod(start, now)
+    }
+
+    fun avgScoreAllTime(now:Long): Float {
+        //clamping should be true, else the score will always be very close to zero.
+        return avgScoreInPeriod(0,now, true)
     }
 
 

@@ -68,7 +68,7 @@ class HabitFrag : Fragment() {
 
         val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
         val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
-        val scoreAllTime = habit.avgScoreInPeriod(0,System.currentTimeMillis())
+        val scoreAllTime = habit.avgScoreAllTime(System.currentTimeMillis())
 
         habitFrag_historyTv.text = getString(R.string.habitfrag_historyText, scoreThisWeek,scoreThisMonth,scoreAllTime)
     }
