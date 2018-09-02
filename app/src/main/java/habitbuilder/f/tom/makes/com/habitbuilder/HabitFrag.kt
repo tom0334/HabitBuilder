@@ -1,16 +1,15 @@
 package habitbuilder.f.tom.makes.com.habitbuilder
 
 
+
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_habit.*
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.*
 
 private val PARAM_ONE_ID = "PARAM_1"
 private val PARAM_TWO_ID = "PARAM_2"
@@ -34,10 +33,11 @@ class HabitFrag : Fragment() {
         val args:Bundle = arguments!!
         this.indexInViewPager = args.getInt(PARAM_ONE_ID)
         this.habitId = args.getString(PARAM_TWO_ID)
-        this.saver = SnappyHabitSaver(context!!)
+        this.saver = SnappyHabitSaver(activity!!)
         this.habit = saver.load(habitId)
-
     }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -57,8 +57,10 @@ class HabitFrag : Fragment() {
 
         if(habit.archievedGoalToday(timesToday)){
             habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
+            habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!,R.color.my_material_green))
         }else{
             habitFrag_goalTv.text = getString(R.string.habitfrag_goalNotReached, habit.goal)
+            habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!,R.color.my_material_red))
         }
         habitFrag_amountTv.text = timesToday.toString()
     }
@@ -84,10 +86,6 @@ class HabitFrag : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        saver.close()
-    }
 
 
 
