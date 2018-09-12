@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">HabitBuilder</string>
+    <string name="menu_main_create_habit">Create Habit</string>
+    <string name="habitfrag_goalReached">You reached your goal of %1$d. Amount today:</string>
+    <string name="habitfrag_goalNotReached">You did NOT reach your goal of %1$d. Amount today:</string>
+    <string name="habitfrag_historyText">This week: %1$.2f,  This month:%2$.2f,  All time: %3$.2f</string>
 </resources>

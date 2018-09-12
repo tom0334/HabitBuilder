@@ -1,12 +1,15 @@
 package habitbuilder.f.tom.makes.com.habitbuilder
 
 
+
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_habit.*
 
 private val PARAM_ONE_ID = "PARAM_1"
 private val PARAM_TWO_ID = "PARAM_2"
@@ -18,13 +21,22 @@ class HabitFrag : Fragment() {
 
     //Primitives cannot be lateinit
     private var indexInViewPager: Int = -1
-    private var  habitId: String = ""
+    private lateinit var habitId: String
+    private lateinit var habit: Habit
+    private lateinit var saver: SnappyHabitSaver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.indexInViewPager = arguments?.get(PARAM_ONE_ID) as Int?  ?: throw IllegalArgumentException("Could not get argument one!")
-        this.habitId = arguments?.get(PARAM_TWO_ID) as String? ?: throw IllegalArgumentException("Could not get argument two!")
+        require(arguments!=null)
+        require(context!=null)
+
+        val args:Bundle = arguments!!
+        this.indexInViewPager = args.getInt(PARAM_ONE_ID)
+        this.habitId = args.getString(PARAM_TWO_ID)
+        this.saver = SnappyHabitSaver(activity!!)
+        this.habit = saver.load(habitId)
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -32,10 +44,42 @@ class HabitFrag : Fragment() {
         return inflater.inflate(R.layout.fragment_habit, container, false)
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val tv = view.findViewById<TextView>(R.id.habitFragText)
-        tv.text= "Hello from Fragment ${this.indexInViewPager}. The habitId is $habitId"
+        addClickListeners()
+        showData()
+    }
+
+    fun showData(){
+        val timeUtils = TimeUtilsJvm()
+
+        val timesToday = habit.timesOnDay(System.currentTimeMillis(),TimeUtilsJvm())
+
+        if(habit.archievedGoalToday(timesToday)){
+            habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
+            habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!,R.color.my_material_green))
+        }else{
+            habitFrag_goalTv.text = getString(R.string.habitfrag_goalNotReached, habit.goal)
+            habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!,R.color.my_material_red))
+        }
+        habitFrag_amountTv.text = timesToday.toString()
+
+        val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
+        val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
+        val scoreAllTime = habit.avgScoreAllTime(System.currentTimeMillis())
+
+        habitFrag_historyTv.text = getString(R.string.habitfrag_historyText, scoreThisWeek,scoreThisMonth,scoreAllTime)
+    }
+
+    private fun addClickListeners() {
+        habitFrag_justNowButton.setOnClickListener {
+            Toast.makeText(this.context,"Great!",Toast.LENGTH_LONG).show()
+            habit.addTimeStamp(HabitTimeStamp(System.currentTimeMillis()))
+            saver.save(habit)
+            showData()
+        }
     }
 
 
@@ -49,6 +93,7 @@ class HabitFrag : Fragment() {
             return f
         }
     }
+
 
 
 

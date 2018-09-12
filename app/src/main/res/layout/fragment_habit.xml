@@ -1,28 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HabitFrag">
+    tools:context="HabitFrag"
+    android:orientation="vertical">
 
-    <android.support.v4.widget.NestedScrollView
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="32dp"
+        android:text="Today"
+        android:textSize="48sp" />
+
+    <TextView
+        android:id="@+id/habitFrag_goalTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/habitfrag_goalReached"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/habitFrag_amountTv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:autoSizeMaxTextSize="196sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="16" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/habitFrag_historyTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Last week: 0.7, all time: 0.8" />
 
-            <TextView
-                android:id="@+id/habitFragText"
-                android:layout_width="match_parent"
-                android:layout_height="800dp"
-                android:gravity="center"
-                android:text="PlaceHolder text" />
+    <TextView
+        android:id="@+id/habitFrag_betterOrWorseTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="You are doing worse this week, get it up!" />
 
-        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="I did it a while ago..." />
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="Edit previous times" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/habitFrag_justNowButton"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        android:text="I did it just now"
+        android:textSize="32sp" />
 
 
-    </android.support.v4.widget.NestedScrollView>
-</FrameLayout>
+</LinearLayout>
