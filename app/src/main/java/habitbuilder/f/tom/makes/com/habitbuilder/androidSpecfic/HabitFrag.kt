@@ -1,4 +1,4 @@
-package habitbuilder.f.tom.makes.com.habitbuilder
+package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
 
 
@@ -9,13 +9,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import habitbuilder.f.tom.makes.com.habitbuilder.*
+import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import kotlinx.android.synthetic.main.fragment_habit.*
 
+//these are just paramms that are used for the .newinstance pattern
 private val PARAM_ONE_ID = "PARAM_1"
 private val PARAM_TWO_ID = "PARAM_2"
+
 /**
- * A [Fragment] subclass that will show a single habit.
- *
+ * A [Fragment] subclass that will show a single habit, with some basic information on how the
+ * user is doing. It also lets the user add new times when the user has done the habit.
  */
 class HabitFrag : Fragment() {
 
@@ -55,14 +62,16 @@ class HabitFrag : Fragment() {
     fun showData(){
         val timeUtils = TimeUtilsJvm()
 
-        val timesToday = habit.timesOnDay(System.currentTimeMillis(),TimeUtilsJvm())
+        val timesToday = habit.timesOnDay(System.currentTimeMillis(), TimeUtilsJvm())
 
-        if(habit.archievedGoalToday(timesToday)){
+        if(habit.achievedGoalToday(timesToday)){
             habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
-            habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!,R.color.my_material_green))
+            //show the large number in green
+            habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!, R.color.my_material_green))
         }else{
             habitFrag_goalTv.text = getString(R.string.habitfrag_goalNotReached, habit.goal)
-            habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!,R.color.my_material_red))
+            //show the large number in red
+            habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!, R.color.my_material_red))
         }
         habitFrag_amountTv.text = timesToday.toString()
 

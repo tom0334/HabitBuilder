@@ -1,4 +1,4 @@
-package habitbuilder.f.tom.makes.com.habitbuilder
+package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -6,16 +6,22 @@ import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
-import android.R.menu
-import android.view.MenuInflater
 import android.view.MenuItem
+import habitbuilder.f.tom.makes.com.habitbuilder.*
+import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabase
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.adapters.HabitsPagerAdapter
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
 
-
+/**
+ * The main activity that houses a Viewpager with a habit on every page.
+ *
+ * It reads the database to find the names of the habits to display them in the Tab names.
+ */
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var saver: HabitDatabase
-    private lateinit var adapter:HabitsPagerAdapter
+    private lateinit var adapter: HabitsPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         this.saver = SnappyHabitSaver(this)
 
         //prepare the viewpager
-        this.adapter =  HabitsPagerAdapter(this.supportFragmentManager, saver.loadAll())
+        this.adapter = HabitsPagerAdapter(this.supportFragmentManager, saver.loadAll())
         val pager = findViewById<ViewPager>(R.id.mainPager)
         pager.adapter = adapter
 
@@ -34,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         tabLayout.setupWithViewPager(pager)
     }
 
+    /**
+     * Refresh the data from the database. This can be needed when a new habit is created,
+     * or when the name of a habit changes.
+     */
     private fun refresh(){
         val newData = saver.loadAll()
         adapter.data = newData

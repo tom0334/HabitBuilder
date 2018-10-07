@@ -1,15 +1,31 @@
-package habitbuilder.f.tom.makes.com.habitbuilder
+package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations
 
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.snappydb.DB
 import com.snappydb.DBFactory
+import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabase
 
-
+val DB_NAME = "HABITS_DB"
+val DB_VERSION_KEY = "VERSION"
+val DB_VERSION_NUM = 0
 val HABIT_BASE_KEY= "Habit:"
 
 class SnappyHabitSaver(context:Context) : HabitDatabase {
+
+    companion object {
+        fun initdatabase(context: Context){
+            val snappydb = DBFactory.open(context, DB_NAME)
+            if(!snappydb.exists(DB_VERSION_KEY)  || snappydb.getInt(DB_VERSION_KEY) != DB_VERSION_NUM){
+                snappydb.putInt(DB_VERSION_KEY, DB_VERSION_NUM)
+                Log.i("HabitBuilderApplication", "Inserted first db version $DB_VERSION_NUM")
+            }
+            Log.i("HabitBuilderApplication", "Keycount is ${snappydb.countKeys(DB_VERSION_KEY)}")
+            snappydb.close()
+        }
+    }
 
     private val gson = Gson()
     private val db: DB = DBFactory.open(context, DB_NAME)
@@ -49,3 +65,4 @@ class SnappyHabitSaver(context:Context) : HabitDatabase {
         db.close()
     }
 }
+

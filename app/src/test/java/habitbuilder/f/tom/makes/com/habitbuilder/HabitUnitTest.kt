@@ -1,5 +1,8 @@
 package habitbuilder.f.tom.makes.com.habitbuilder
 
+import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.HABIT_BASE_KEY
 import org.junit.Assert
 import org.junit.Test
 
@@ -11,7 +14,7 @@ import java.util.*
  */
 class HabitUnitTest {
 
-    var hab = Habit(HABIT_BASE_KEY + 0,"HabitName",2)
+    var hab = Habit(HABIT_BASE_KEY + 0, "HabitName", 2)
 
     val orderedTestDates = listOf(
             GregorianCalendar(2018,1,4),
@@ -24,7 +27,7 @@ class HabitUnitTest {
 
     @Before
     fun prepare(){
-        hab = Habit(HABIT_BASE_KEY + 0,"HabitName",2)
+        hab = Habit(HABIT_BASE_KEY + 0, "HabitName", 2)
     }
 
     //checks if the list of timestamps is in the correct order
@@ -32,7 +35,7 @@ class HabitUnitTest {
     fun testTimeStampOrder(){
         //add all dates in order
         for (date in orderedTestDates){
-            hab.addTimeStamp(HabitTimeStamp( date.timeInMillis))
+            hab.addTimeStamp(HabitTimeStamp(date.timeInMillis))
         }
         //check that they are still in order
         Assert.assertEquals(orderedTestDates[0].timeInMillis, hab.timeStamps[0].time)
@@ -45,7 +48,7 @@ class HabitUnitTest {
     @Test
     fun testTimeStampsOrderMixed(){
         hab.addTimeStamp(HabitTimeStamp(orderedTestDates[1].timeInMillis))
-        hab.addTimeStamp(HabitTimeStamp( orderedTestDates[0].timeInMillis))
+        hab.addTimeStamp(HabitTimeStamp(orderedTestDates[0].timeInMillis))
 
         Assert.assertEquals(orderedTestDates[0].timeInMillis, hab.timeStamps[0].time)
     }
@@ -79,7 +82,7 @@ class HabitUnitTest {
     //these tests are for the inverse function, the amount of days per time:
     @Test
     fun testScoreInverse(){
-        hab.addTimeStamp(HabitTimeStamp( orderedTestDates[0].timeInMillis))
+        hab.addTimeStamp(HabitTimeStamp(orderedTestDates[0].timeInMillis))
         //two days, only did the habit once. So it happens once every two days
         Assert.assertEquals(2f, hab.daysPerTimeInPeriod(firstTime,lastTime))
     }
@@ -87,7 +90,7 @@ class HabitUnitTest {
     @Test
     fun testScoreInverseZeroTimePassed(){
         //the only timestamp is the same as the timeSince
-        hab.addTimeStamp(HabitTimeStamp( lastTime))
+        hab.addTimeStamp(HabitTimeStamp(lastTime))
         Assert.assertEquals(0f, hab.daysPerTimeInPeriod(lastTime,lastTime))
     }
 

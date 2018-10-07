@@ -1,26 +1,19 @@
-package habitbuilder.f.tom.makes.com.habitbuilder
+package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations
 
+import habitbuilder.f.tom.makes.com.habitbuilder.common.TimeUtils
 import java.util.*
 
-abstract class TimeUtils{
-    private val MILLIS_IN_DAY = 86400 * 1000
-    private val MILLIS_IN_WEEK = MILLIS_IN_DAY * 7
-
-    abstract fun timeAtStartOfDay(timeNow:Long):Long
-    abstract fun timeAtStartOfNextDay(timeNow: Long): Long
-    abstract fun oneMonthAgo(now: Long): Long
-
-    //Exactly one week ago, NOT from the start of the day
-    fun oneWeekAgo(timeNow: Long): Long{
-        return timeNow - MILLIS_IN_WEEK
-    }
-}
-
+/**
+ * An JVM TimeUtils implementation based on the calendar class
+ */
 class TimeUtilsJvm: TimeUtils() {
 
-    private fun getCalAtStartOfDay(timeNow: Long):Calendar{
+    //util function that returns a calendar instance, set to the start of a day
+    private fun getCalAtStartOfDay(timeNow: Long): Calendar {
         val cal = Calendar.getInstance()
         cal.timeInMillis = timeNow
+
+        //set the time to the start of the day
         cal.set(Calendar.HOUR_OF_DAY, 0)
         cal.set(Calendar.MINUTE, 0)
         cal.set(Calendar.SECOND, 0)
@@ -45,7 +38,4 @@ class TimeUtilsJvm: TimeUtils() {
         cal.add(Calendar.MONTH, -1)
         return cal.timeInMillis
     }
-
-
-
 }
