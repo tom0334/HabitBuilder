@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_main"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+
+    <TextView
+        android:background="@color/my_material_red"
+        android:text="hello world"
+        android:layout_width="match_parent"
+        android:layout_height="56dp" />
+
+
+    <TextView
+        android:background="@color/my_material_green"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+
+</LinearLayout>

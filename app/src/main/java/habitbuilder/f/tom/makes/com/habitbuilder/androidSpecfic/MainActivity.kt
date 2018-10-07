@@ -2,6 +2,7 @@ package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
@@ -12,6 +13,11 @@ import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabase
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.adapters.HabitsPagerAdapter
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
+import kotlinx.android.synthetic.main.layout_main_bottom_sheet.*
+import android.view.View
+import android.support.annotation.NonNull
+
+
 
 /**
  * The main activity that houses a Viewpager with a habit on every page.
@@ -38,6 +44,30 @@ class MainActivity : AppCompatActivity() {
 
         val tabLayout = findViewById<TabLayout>(R.id.mainTabLayout)
         tabLayout.setupWithViewPager(pager)
+
+
+        val sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+        sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+        })
     }
 
     /**
