@@ -15,8 +15,10 @@ import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.adapters.HabitsP
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
 import kotlinx.android.synthetic.main.layout_main_bottom_sheet.*
 import android.view.View
-import android.support.annotation.NonNull
 
+import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
+import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
+import android.widget.LinearLayout
 
 
 /**
@@ -45,7 +47,10 @@ class MainActivity : AppCompatActivity() {
         val tabLayout = findViewById<TabLayout>(R.id.mainTabLayout)
         tabLayout.setupWithViewPager(pager)
 
+        setupSheet()
+    }
 
+    private fun setupSheet() {
         val sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -65,10 +70,25 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
+                //this rotates the icon to show it upside down when the panel is expanded
+                //also looks very p
+                main_toggle_sheet_button.rotation = slideOffset * 180
             }
         })
+
+        with(sheetBehavior) {
+            main_toggle_sheet_button.setOnClickListener {
+                when (state) {
+                    STATE_COLLAPSED -> state = STATE_EXPANDED
+                    STATE_EXPANDED -> state = STATE_COLLAPSED
+                }
+            }
+        }
     }
+
+
+
+
 
     /**
      * Refresh the data from the database. This can be needed when a new habit is created,
