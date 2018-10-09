@@ -18,7 +18,7 @@ import android.view.View
 
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
-import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**
@@ -71,8 +71,9 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 //this rotates the icon to show it upside down when the panel is expanded
-                //also looks very p
+                //also looks very pretty
                 main_toggle_sheet_button.rotation = slideOffset * 180
+                main_content.transitionBackGroundColor(slideOffset, R.color.colorNormal, R.color.colorFaded)
             }
         })
 
