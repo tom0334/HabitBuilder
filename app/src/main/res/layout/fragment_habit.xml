@@ -39,14 +39,6 @@
 
 
     <TextView
-        android:id="@+id/habitFrag_historyTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="2dp"
-        android:text="Last week: 0.7, all time: 0.8" />
-
-    <TextView
         android:id="@+id/habitFrag_betterOrWorseTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,6 +46,10 @@
         android:padding="2dp"
         android:text="You are doing worse this week, get it up!" />
 
+
+    <!--todo: add a custom view that shows the last week. a sort of calendar with squares, with a
+    colour indicating if it was completed
+    -->
 
     <LinearLayout
         android:layout_width="match_parent"

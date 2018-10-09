@@ -18,6 +18,8 @@ import android.view.View
 
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
+import android.widget.LinearLayout
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -30,6 +32,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var saver: HabitDatabase
     private lateinit var adapter: HabitsPagerAdapter
+
+    private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +52,11 @@ class MainActivity : AppCompatActivity() {
         val tabLayout = findViewById<TabLayout>(R.id.mainTabLayout)
         tabLayout.setupWithViewPager(pager)
 
+        this.sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         setupSheet()
     }
 
     private fun setupSheet() {
-        val sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
@@ -85,6 +90,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+
+        val timeUtils = TimeUtilsJvm()
+        //setup the text in the peek area
+        val habit = adapter.getHabitForPosition(mainPager.currentItem)
+
+        val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
+        val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
+        val scoreAllTime = habit.avgScoreAllTime(System.currentTimeMillis())
+
+        bottom_sheet_peek_week_tv.text = getString(R.string.bottom_sheet_peek_onAvgThisWeek, scoreThisWeek)
     }
 
 
