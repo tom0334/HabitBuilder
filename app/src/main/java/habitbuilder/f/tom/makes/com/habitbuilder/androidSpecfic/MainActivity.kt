@@ -56,6 +56,9 @@ class MainActivity : AppCompatActivity() {
         setupSheet()
     }
 
+    /**
+     * This function sets up the bottom sheet and the views inside it.
+     */
     private fun setupSheet() {
         sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -82,6 +85,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        //Setup the button that expands the sheet.
         with(sheetBehavior) {
             main_toggle_sheet_button.setOnClickListener {
                 when (state) {
@@ -103,9 +107,7 @@ class MainActivity : AppCompatActivity() {
         bottom_sheet_peek_week_tv.text = getString(R.string.bottom_sheet_peek_onAvgThisWeek, scoreThisWeek)
     }
 
-
-
-
+    
 
     /**
      * Refresh the data from the database. This can be needed when a new habit is created,
@@ -117,6 +119,10 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
+    /**
+     * Called when the create habbit button is clicked.  This adds a new habit and refreshes.
+     * todo: make a nice UI for this
+     */
     private fun onCreateHabitClicked(){
         val habit = Habit(
                 saver.generateNewHabitId(),

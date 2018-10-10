@@ -57,11 +57,13 @@
             android:orientation="vertical">
 
             <TextView
+                android:text="Graph place holder"
                 android:layout_width="match_parent"
                 android:layout_height="1000dp"
                 android:background="@color/my_material_green" />
 
             <TextView
+                android:text="Graph place holder"
                 android:layout_width="match_parent"
                 android:layout_height="1000dp"
                 android:background="@color/my_material_red" />
