@@ -8,14 +8,9 @@
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:paddingTop="32dp"
-        android:text="Today"
-        android:textSize="48sp" />
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginTop="16dp"
 
-    <TextView
         android:id="@+id/habitFrag_goalTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,32 +19,28 @@
         android:paddingRight="16dp"
         android:paddingTop="8dp"
         android:text="@string/habitfrag_goalReached"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
     <TextView
+        android:fontFamily="sans-serif-light"
         android:id="@+id/habitFrag_amountTv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:autoSizeMaxTextSize="196sp"
+        android:autoSizeMaxTextSize="192sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
         android:padding="16dp"
         android:text="16" />
 
 
-    <TextView
-        android:id="@+id/habitFrag_betterOrWorseTv"
+
+
+    <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.HabitWeekView
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="2dp"
-        android:text="You are doing worse this week, get it up!" />
-
-
-    <!--todo: add a custom view that shows the last week. a sort of calendar with squares, with a
-    colour indicating if it was completed
-    -->
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
