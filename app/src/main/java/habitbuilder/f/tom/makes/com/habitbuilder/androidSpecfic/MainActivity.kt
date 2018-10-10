@@ -42,18 +42,33 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.mainToolbar)
         setSupportActionBar(toolbar)
 
+
         this.saver = SnappyHabitSaver(this)
 
         //prepare the viewpager
         this.adapter = HabitsPagerAdapter(this.supportFragmentManager, saver.loadAll())
-        val pager = findViewById<ViewPager>(R.id.mainPager)
-        pager.adapter = adapter
+        main_viewPager.adapter = adapter
+        main_viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            //todo add a fancy (fade?) animation to the text.
+            }
+
+            override fun onPageSelected(position: Int) {
+                updateSheet(position)
+            }
+
+        })
 
         val tabLayout = findViewById<TabLayout>(R.id.mainTabLayout)
-        tabLayout.setupWithViewPager(pager)
+        tabLayout.setupWithViewPager(main_viewPager)
 
         this.sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         setupSheet()
+        updateSheet(main_viewPager.currentItem)
     }
 
     /**
@@ -95,10 +110,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
 
+    /** This updates the bottom sheet when the page is scrolled.
+     * @param the new page.
+     */
+    private fun updateSheet(currentPage: Int){
         val timeUtils = TimeUtilsJvm()
         //setup the text in the peek area
-        val habit = adapter.getHabitForPosition(mainPager.currentItem)
+        val habit = adapter.getHabitForPosition(currentPage)
 
         val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
         val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
@@ -107,7 +127,7 @@ class MainActivity : AppCompatActivity() {
         bottom_sheet_peek_week_tv.text = getString(R.string.bottom_sheet_peek_onAvgThisWeek, scoreThisWeek)
     }
 
-    
+
 
     /**
      * Refresh the data from the database. This can be needed when a new habit is created,
