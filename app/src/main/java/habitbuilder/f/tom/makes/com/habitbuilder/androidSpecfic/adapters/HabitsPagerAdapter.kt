@@ -21,4 +21,11 @@ class HabitsPagerAdapter(fm: FragmentManager, var data: List<Habit>): FragmentSt
     override fun getPageTitle(position: Int): CharSequence? {
         return data[position].name
     }
+
+    /**
+     * Returns the habit belonging to the given page
+     */
+    fun getHabitForPosition(pageNumber: Int): Habit {
+        return data[pageNumber]
+    }
 }

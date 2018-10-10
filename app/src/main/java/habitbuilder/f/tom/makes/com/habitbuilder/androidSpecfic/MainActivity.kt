@@ -2,6 +2,7 @@ package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
@@ -12,6 +13,15 @@ import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabase
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.adapters.HabitsPagerAdapter
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
+import kotlinx.android.synthetic.main.layout_main_bottom_sheet.*
+import android.view.View
+
+import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
+import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
+import android.widget.LinearLayout
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 /**
  * The main activity that houses a Viewpager with a habit on every page.
@@ -23,22 +33,101 @@ class MainActivity : AppCompatActivity() {
     private lateinit var saver: HabitDatabase
     private lateinit var adapter: HabitsPagerAdapter
 
+    private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<Toolbar>(R.id.mainToolbar)
         setSupportActionBar(toolbar)
 
+
         this.saver = SnappyHabitSaver(this)
 
         //prepare the viewpager
         this.adapter = HabitsPagerAdapter(this.supportFragmentManager, saver.loadAll())
-        val pager = findViewById<ViewPager>(R.id.mainPager)
-        pager.adapter = adapter
+        main_viewPager.adapter = adapter
+        main_viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            //todo add a fancy (fade?) animation to the text.
+            }
+
+            override fun onPageSelected(position: Int) {
+                updateSheet(position)
+            }
+
+        })
 
         val tabLayout = findViewById<TabLayout>(R.id.mainTabLayout)
-        tabLayout.setupWithViewPager(pager)
+        tabLayout.setupWithViewPager(main_viewPager)
+
+        this.sheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+        setupSheet()
+        updateSheet(main_viewPager.currentItem)
     }
+
+    /**
+     * This function sets up the bottom sheet and the views inside it.
+     */
+    private fun setupSheet() {
+        sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                //this rotates the icon to show it upside down when the panel is expanded
+                //also looks very pretty
+                main_toggle_sheet_button.rotation = slideOffset * 180
+                main_content.transitionBackGroundColor(slideOffset, R.color.colorNormal, R.color.colorFaded)
+            }
+        })
+
+        //Setup the button that expands the sheet.
+        with(sheetBehavior) {
+            main_toggle_sheet_button.setOnClickListener {
+                when (state) {
+                    STATE_COLLAPSED -> state = STATE_EXPANDED
+                    STATE_EXPANDED -> state = STATE_COLLAPSED
+                }
+            }
+        }
+
+    }
+
+    /** This updates the bottom sheet when the page is scrolled.
+     * @param the new page.
+     */
+    private fun updateSheet(currentPage: Int){
+        val timeUtils = TimeUtilsJvm()
+        //setup the text in the peek area
+        val habit = adapter.getHabitForPosition(currentPage)
+
+        val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
+        val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
+        val scoreAllTime = habit.avgScoreAllTime(System.currentTimeMillis())
+
+        bottom_sheet_peek_week_tv.text = getString(R.string.bottom_sheet_peek_onAvgThisWeek, scoreThisWeek)
+    }
+
+
 
     /**
      * Refresh the data from the database. This can be needed when a new habit is created,
@@ -50,6 +139,10 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
+    /**
+     * Called when the create habbit button is clicked.  This adds a new habit and refreshes.
+     * todo: make a nice UI for this
+     */
     private fun onCreateHabitClicked(){
         val habit = Habit(
                 saver.generateNewHabitId(),
