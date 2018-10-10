@@ -57,11 +57,9 @@ class HabitFrag : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         addClickListeners()
         showData()
-
         main_habit_week_view.post {
-            main_habit_week_view.init(main_habit_week_view.width)
+            main_habit_week_view.init(main_habit_week_view.width, this.habit)
         }
-
     }
 
 

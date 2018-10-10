@@ -23,7 +23,9 @@ class HabitsPagerAdapter(fm: FragmentManager, var data: List<Habit>): FragmentSt
     }
 
     /**
-     * Returns the habit belonging to the given page
+     * Returns the habit belonging to the given page.
+     *
+     * This can return null when the habit does not exist, for example when there are no habits yet
      */
     fun getHabitForPosition(pageNumber: Int): Habit? {
         if (pageNumber in data.indices) {

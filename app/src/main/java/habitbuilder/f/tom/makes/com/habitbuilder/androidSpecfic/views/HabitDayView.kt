@@ -6,6 +6,9 @@ import android.view.View
 import android.widget.LinearLayout
 import habitbuilder.f.tom.makes.com.habitbuilder.R
 
+/**
+ * Class that represents a day in the habit week view. NOT intended to be used separately.
+ */
 class HabitDayView(context: Context?) : LinearLayout(context) {
 
     init {
