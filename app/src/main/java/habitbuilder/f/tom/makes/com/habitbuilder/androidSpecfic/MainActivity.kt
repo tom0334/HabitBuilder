@@ -120,6 +120,10 @@ class MainActivity : AppCompatActivity() {
         //setup the text in the peek area
         val habit = adapter.getHabitForPosition(currentPage)
 
+        if (habit==null){
+            return
+        }
+
         val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
         val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
         val scoreAllTime = habit.avgScoreAllTime(System.currentTimeMillis())

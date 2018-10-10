@@ -9,33 +9,9 @@
     tools:showIn="@layout/fragment_habit">
 
 
-    <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitDayView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+<!--    <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitDayView
+        android:layout_width="60dp"
+        android:layout_height="wrap_content" />-->
 
-
-    <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitDayView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-
-    <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitDayView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-
-    <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitDayView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-
-    <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitDayView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
 
 </LinearLayout>

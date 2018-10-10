@@ -25,7 +25,10 @@ class HabitsPagerAdapter(fm: FragmentManager, var data: List<Habit>): FragmentSt
     /**
      * Returns the habit belonging to the given page
      */
-    fun getHabitForPosition(pageNumber: Int): Habit {
-        return data[pageNumber]
+    fun getHabitForPosition(pageNumber: Int): Habit? {
+        if (pageNumber in data.indices) {
+            return data[pageNumber]
+        }
+        return null
     }
 }

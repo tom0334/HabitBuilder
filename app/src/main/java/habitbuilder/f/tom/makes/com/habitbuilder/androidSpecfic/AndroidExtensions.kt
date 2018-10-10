@@ -1,6 +1,8 @@
 package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
+import android.content.Context
 import android.support.v4.content.ContextCompat
+import android.util.TypedValue
 import android.view.View
 
 
@@ -50,4 +52,12 @@ fun View.transitionBackGroundColor(progress : Float, colorFromId:Int, colorToId:
     val colorTo = ContextCompat.getColor(this.context, colorToId)
     this.setBackgroundColor(interpolateColor(progress, colorFrom, colorTo))
 }
+
+fun Int.toPixel(context: Context) :Int{
+    val r = context.resources
+    val pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,this.toFloat(), r.getDisplayMetrics())
+    return  pixels.toInt()
+}
+
+
 

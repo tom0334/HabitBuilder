@@ -37,6 +37,7 @@
 
 
     <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.HabitWeekView
+        android:id="@+id/main_habit_week_view"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_width="match_parent"
