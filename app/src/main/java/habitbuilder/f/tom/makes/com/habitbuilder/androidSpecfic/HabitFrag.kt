@@ -69,7 +69,7 @@ class HabitFrag : Fragment() {
 
         val timesToday = habit.timesOnDay(System.currentTimeMillis(), TimeUtilsJvm())
 
-        if(habit.achievedGoalToday(timesToday)){
+        if(habit.archievedGoalOnDay(timesToday)){
             habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
             //show the large number in green
             habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!, R.color.my_material_green))
@@ -79,6 +79,8 @@ class HabitFrag : Fragment() {
             habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!, R.color.my_material_red))
         }
         habitFrag_amountTv.text = timesToday.toString()
+
+        main_habit_week_view.update()
     }
 
     private fun addClickListeners() {
