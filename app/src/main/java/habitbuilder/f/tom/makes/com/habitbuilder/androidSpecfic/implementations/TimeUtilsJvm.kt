@@ -12,6 +12,9 @@ val SECONDS_IN_DAY = 86400
  * An JVM TimeUtils implementation based on the calendar class
  */
 class TimeUtilsJvm: TimeUtils() {
+    override fun daysAgo(timeNow: Long, days: Int): Long {
+        return timeNow - days * MILLIS_IN_DAY
+    }
 
     override fun oneWeekAgo(timeNow: Long): Long {
         return timeNow - MILLIS_IN_WEEK

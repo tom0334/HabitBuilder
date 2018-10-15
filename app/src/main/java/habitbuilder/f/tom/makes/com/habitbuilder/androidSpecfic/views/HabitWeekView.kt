@@ -2,7 +2,6 @@ package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TimeUtils
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import habitbuilder.f.tom.makes.com.habitbuilder.R
@@ -36,10 +35,12 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
         val amount = min(maxAmountForSpace, 7)
 
 
-        var time = System.currentTimeMillis()
-        for (i in 0 until amount) {
-            time = TimeUtilsJvm().oneDayAgo(time)
-            val dayView = HabitDayView(this.context,habit, time )
+        //start at one day ago. This means today is not showed here, as that is showed in the large
+        //section already
+        for (daysAgo in 1  .. amount) {
+            //timeMillis corresponding to the amount of days ago
+            val timeMillis = TimeUtilsJvm().daysAgo( System.currentTimeMillis(), daysAgo)
+            val dayView = HabitDayView(this.context,habit, timeMillis, daysAgo )
 
             dayView.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f)
             dayViews.add(dayView)

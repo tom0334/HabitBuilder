@@ -26,5 +26,7 @@ abstract class TimeUtils{
 
     //exactly one day ago. NOT from the start of the day
     abstract fun oneDayAgo(time:Long): Long
+
+    abstract fun daysAgo(timeNow: Long, days: Int): Long
 }
 
