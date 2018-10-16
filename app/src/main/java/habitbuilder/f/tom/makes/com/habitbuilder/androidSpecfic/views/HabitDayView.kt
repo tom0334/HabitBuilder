@@ -31,11 +31,13 @@ class HabitDayView(context: Context, val habit: Habit, val dayStart: Long, val d
 
 
         if(daysAgo==1) {
-            habitDayView_date.text = context.getString(R.string.habit_week_view_yesterday)
+            habitDayView_day_of_week.text = context.getString(R.string.habit_week_view_yesterday)
         }
         else{
-            habitDayView_date.text = SimpleDateFormat("EEE").format(date)
+            habitDayView_day_of_week.text = SimpleDateFormat("EEE").format(date)
         }
+
+        habitDayView_date.text = SimpleDateFormat("dd-MMM").format(date)
 
         //find the number today
         val timesToday = habit.timesOnDay(dayStart,timeUtils)
