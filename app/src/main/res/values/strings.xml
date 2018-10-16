@@ -5,4 +5,5 @@
     <string name="habitfrag_goalNotReached">You did NOT reach your goal of %1$d today:</string>
     <string name="bottom_sheet_peek_onAvgThisWeek">%1$.2f on average this week.</string>
     <string name="habit_week_view_yesterday">Yesterday</string>
+    <string name="habit_day_view_toast_long_press">Press and hold to add</string>
 </resources>

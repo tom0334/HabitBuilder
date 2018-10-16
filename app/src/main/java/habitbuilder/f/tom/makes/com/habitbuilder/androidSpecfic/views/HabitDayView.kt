@@ -1,9 +1,11 @@
 package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views
 
 import android.content.Context
+import android.provider.SyncStateContract.Helpers.update
 import android.view.View
 import android.widget.LinearLayout
 import habitbuilder.f.tom.makes.com.habitbuilder.R
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.HabitWeekView
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import kotlinx.android.synthetic.main.habit_day_view.view.*
@@ -18,7 +20,7 @@ import java.util.*
  * @param daysAgo the amount of days ago this view shows.
  * @param dayStart the timestamp corresponding to the daysago
  */
-class HabitDayView(context: Context, val habit: Habit, val dayStart: Long, val daysAgo:Int) : LinearLayout(context) {
+class HabitDayView(val parent: HabitWeekView, val habit: Habit,  val dayStart: Long, val daysAgo:Int) : LinearLayout(parent.context) {
 
     init {
         View.inflate(context, R.layout.habit_day_view,this)
@@ -48,6 +50,8 @@ class HabitDayView(context: Context, val habit: Habit, val dayStart: Long, val d
         else context.getDrawable(R.drawable.circle_red)
 
     }
+
+
 
 
 
