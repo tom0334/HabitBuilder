@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".androidSpecfic.HabitFrag">
 
 
@@ -32,13 +33,16 @@
             android:text="@string/habitfrag_goalReached"
             android:textSize="20sp" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/habitFrag_amountTv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:autoSizeMaxTextSize="192sp"
-            android:autoSizeTextType="uniform"
+            android:textSize="75sp"
+
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="192sp"
+
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:padding="16dp"
