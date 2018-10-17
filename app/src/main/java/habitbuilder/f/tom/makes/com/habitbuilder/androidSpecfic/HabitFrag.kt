@@ -2,10 +2,12 @@ package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -16,6 +18,9 @@ import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
 import kotlinx.android.synthetic.main.fragment_habit.*
+import kotlinx.android.synthetic.main.fragment_habit.view.*
+import nl.dionsegijn.konfetti.models.Shape
+import nl.dionsegijn.konfetti.models.Size
 
 //these are just paramms that are used for the .newinstance pattern
 private val PARAM_ONE_ID = "PARAM_1"
@@ -92,12 +97,34 @@ class HabitFrag : Fragment(), TimeStampAddListener {
     }
 
     private fun addClickListeners() {
-        habitFrag_justNowButton.setOnClickListener {
-            Toast.makeText(this.context,"Great!",Toast.LENGTH_LONG).show()
-            habit.addTimeStamp(HabitTimeStamp(System.currentTimeMillis()))
-            saver.save(habit)
-            showData()
+        habitFrag_justNowButton.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.action== MotionEvent.ACTION_UP) {
+                Toast.makeText(this.context, "Great!", Toast.LENGTH_LONG).show()
+                habit.addTimeStamp(HabitTimeStamp(System.currentTimeMillis()))
+                saver.save(habit)
+                showData()
+                showConFetti(view.x + motionEvent.x, view.y + motionEvent.y)
+            }
+            false
         }
+    }
+
+    private fun showConFetti(x: Float, y: Float){
+
+        //val centerX = origin.x + origin.width/2
+        //val centerY = origin.y + origin.height/2
+         viewKonfetti.build()
+                .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                .setDirection(0.0, 360.0)
+                .setSpeed(10f, 50f)
+                .setTimeToLive(2000L)
+                .addShapes(Shape.RECT)
+                .addSizes(Size(12))
+                .setPosition(x,y)
+                //.setPosition(origin.x, origin.x + origin.width, origin.y, origin.y + origin.height)
+
+                .burst(300)
+
     }
 
 
