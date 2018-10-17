@@ -14,6 +14,7 @@ import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
 import kotlinx.android.synthetic.main.fragment_habit.*
 
 //these are just paramms that are used for the .newinstance pattern
@@ -24,7 +25,14 @@ private val PARAM_TWO_ID = "PARAM_2"
  * A [Fragment] subclass that will show a single habit, with some basic information on how the
  * user is doing. It also lets the user add new times when the user has done the habit.
  */
-class HabitFrag : Fragment() {
+class HabitFrag : Fragment(), TimeStampAddListener {
+
+
+    override fun onTimestampAdded(timestamp: HabitTimeStamp) {
+        habit.addTimeStamp(timestamp)
+        saver.save(habit)
+        showData()
+    }
 
     //Primitives cannot be lateinit
     private var indexInViewPager: Int = -1
@@ -57,14 +65,19 @@ class HabitFrag : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         addClickListeners()
         showData()
+        main_habit_week_view.post {
+            main_habit_week_view.setup( this.habit, this)
+        }
     }
+
+
 
     fun showData(){
         val timeUtils = TimeUtilsJvm()
 
         val timesToday = habit.timesOnDay(System.currentTimeMillis(), TimeUtilsJvm())
 
-        if(habit.achievedGoalToday(timesToday)){
+        if(habit.archievedGoalOnDay(timesToday)){
             habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
             //show the large number in green
             habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!, R.color.my_material_green))
@@ -74,6 +87,8 @@ class HabitFrag : Fragment() {
             habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!, R.color.my_material_red))
         }
         habitFrag_amountTv.text = timesToday.toString()
+
+        main_habit_week_view.update()
     }
 
     private fun addClickListeners() {

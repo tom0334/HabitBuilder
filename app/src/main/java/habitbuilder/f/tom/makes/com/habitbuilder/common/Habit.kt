@@ -1,5 +1,6 @@
 package habitbuilder.f.tom.makes.com.habitbuilder.common
 
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SECONDS_IN_DAY
 import kotlin.math.max
 
 //A simple habit timeStamp. Doesn't do much for now.
@@ -74,7 +75,7 @@ data class Habit(
     /**
      * Returns if the goal is in the day given on the timestamp
      */
-    fun achievedGoalToday(timesToday:Int):Boolean{
+    fun archievedGoalOnDay(timesToday:Int):Boolean{
         if(positive){
             return timesToday >= goal
         }else{

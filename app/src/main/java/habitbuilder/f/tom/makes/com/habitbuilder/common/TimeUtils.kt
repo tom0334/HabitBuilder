@@ -10,10 +10,6 @@ package habitbuilder.f.tom.makes.com.habitbuilder.common
  * Later there might be others for other platforms.
  */
 
-val MILLIS_IN_DAY = 86400 * 1000
-val MILLIS_IN_WEEK = MILLIS_IN_DAY * 7
-val SECONDS_IN_DAY = 86400
-
 abstract class TimeUtils{
 
     //Should return the exact time at the start (00:00) of a day, on the day of timeNow
@@ -26,8 +22,11 @@ abstract class TimeUtils{
     abstract fun oneMonthAgo(now: Long): Long
 
     //Exactly one week ago, NOT from the start of the day
-    fun oneWeekAgo(timeNow: Long): Long{
-        return timeNow - MILLIS_IN_WEEK
-    }
+    abstract fun oneWeekAgo(timeNow: Long): Long
+
+    //exactly one day ago. NOT from the start of the day
+    abstract fun oneDayAgo(time:Long): Long
+
+    abstract fun daysAgo(timeNow: Long, days: Int): Long
 }
 

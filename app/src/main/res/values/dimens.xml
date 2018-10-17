@@ -3,4 +3,6 @@
 
     <dimen name="bottom_sheet_peek_height">56dp</dimen>
 
+    <dimen name="habit_day_min_width">52dp</dimen>
+
 </resources>
