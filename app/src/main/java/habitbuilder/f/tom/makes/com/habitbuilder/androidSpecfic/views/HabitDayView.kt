@@ -27,6 +27,11 @@ class HabitDayView(val parent: HabitWeekView, val habit: Habit,  val dayStart: L
         update()
     }
 
+    /**
+     * Updates this habitDayView after the habit changed.
+     *
+     * Also called in the setup function.
+     */
     fun update(){
         val timeUtils = TimeUtilsJvm()
         val date = Date(dayStart)

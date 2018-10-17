@@ -66,7 +66,7 @@ class HabitFrag : Fragment(), TimeStampAddListener {
         addClickListeners()
         showData()
         main_habit_week_view.post {
-            main_habit_week_view.init(main_habit_week_view.width, this.habit, this)
+            main_habit_week_view.setup( this.habit, this)
         }
     }
 
