@@ -66,14 +66,15 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
             }
 
             //On longclick, a timestamp is added.
-            dayView.habitDayView_amount.setOnLongClickListener { _: View? ->
+            dayView.habitDayView_amount.setOnLongClickListener {
                 val newTimeStamp = HabitTimeStamp(dayView.dayStart)
-                listener.onTimestampAdded(newTimeStamp)
+                listener.onTimestampAdded(newTimeStamp, it)
                 //return true to consume the touch event
                 true
             }
         }
     }
+
 
     /**
      * This creates the child day views. The amount is dependent on the width!

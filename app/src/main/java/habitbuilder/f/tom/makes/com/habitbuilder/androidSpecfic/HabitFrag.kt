@@ -60,12 +60,14 @@ class HabitFrag : Fragment(), TimeStampAddListener {
     }
 
     /**
-     * This is called when the user adds a timestamp using the habitWeekView
+     * This is called when the user adds a timestamp using the clickedView
      */
-    override fun onTimestampAdded(timestamp: HabitTimeStamp) {
+    override fun onTimestampAdded(timestamp: HabitTimeStamp, clickedView: View) {
         habit.addTimeStamp(timestamp)
         saver.save(habit)
         update(true)
+        showConfettiInCenterOf(clickedView)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,9 +78,9 @@ class HabitFrag : Fragment(), TimeStampAddListener {
         val args:Bundle = arguments!!
         this.indexInViewPager = args.getInt(PARAM_ONE_ID)
         val habitId = args.getString(PARAM_TWO_ID)
+        this.saver = SnappyHabitSaver(activity!!)
         this.habit = saver.load(habitId)
 
-        this.saver = SnappyHabitSaver(activity!!)
     }
 
 
@@ -194,7 +196,7 @@ class HabitFrag : Fragment(), TimeStampAddListener {
                 animationQueue.removeFirst()
                 if (animationQueue.size > 0) {
                     animationQueue.first.start()
-                    showConFetti()
+                    showConfettiInCenterOf(habitFrag_amountTv)
                 }
             }
         })
@@ -203,16 +205,33 @@ class HabitFrag : Fragment(), TimeStampAddListener {
         animationQueue.add(anim)
         if (animationQueue.size==1){
             animationQueue.first.start()
-            showConFetti()
+            showConfettiInCenterOf(habitFrag_amountTv)
         }
     }
 
-    /**
-     * Shows confetti at the center of the amountTV.
-     */
-    private fun showConFetti(){
-        val centerX = habitFrag_amountTv.x + habitFrag_amountTv.width/2
-        val centerY = habitFrag_amountTv.y + habitFrag_amountTv.height/2
+    //This shows a burts of confetti from the center of the amountTV.
+    //it is different from the one that shows confetti from the top!
+    fun showConfettiInCenterOf(centerView:View){
+
+        //Recursively finds the x location of a view relative to the habitFrag_Rootview.
+        //this 
+        fun getRelativeX(myView: View): Float {
+            return if (myView.parent === habitFrag_rootView)
+                myView.x
+            else
+                myView.x + getRelativeX(myView.parent as View)
+        }
+        //same for the y location
+        fun getRelativeY(myView: View): Float {
+            return if (myView.parent === habitFrag_rootView)
+                myView.y
+            else
+                myView.y + getRelativeY(myView.parent as View)
+        }
+
+        val centerX = getRelativeX(centerView) + centerView.width/2
+        val centerY = getRelativeY(centerView) + centerView.height/2
+
 
         viewKonfetti.build()
                 .addColors(Color.RED, Color.GREEN, Color.MAGENTA, Color.BLUE)
@@ -225,5 +244,6 @@ class HabitFrag : Fragment(), TimeStampAddListener {
                 .setPosition(centerX,centerY)
                 .burst(200)
     }
+
 
 }
