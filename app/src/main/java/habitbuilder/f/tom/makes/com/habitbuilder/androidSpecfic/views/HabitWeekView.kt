@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import habitbuilder.f.tom.makes.com.habitbuilder.R
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitDayView
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
@@ -35,8 +36,9 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
     private lateinit var listener: TimeStampAddListener
 
     //the habit to show.
-    private lateinit var habit:Habit
+    private lateinit var habit: Habit
 
+    private lateinit var celebrator: CelebrationAnimationManager
 
     /**
      * Initializes the HabitWeekView, and adds a listener for changes to the HabitWeekView. Note that
@@ -44,17 +46,20 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
      * determine how many habitDayViews it should show.
      *
      * It is best to call it using view.post()
+     * @param celebrator the celebrationManager that is used to show the confetti animations.
      * @param habit the habit to show in this view.
      * @param listener a class that implements the TimeStampAddListener interface. The function in
      * it is called when the user adds a timestemp. The Implementation is responsible for saving the
      * changes!
      */
-    fun setup(habit: Habit, listener: TimeStampAddListener){
-        if (this.width == 0){
-            Log.e(TAG,"MeasuredWidth of the habitWeekView is zero! Did you call setup before the view is measured?" )
+    fun setup(habit: Habit, listener: TimeStampAddListener, celebrator: CelebrationAnimationManager) {
+        if (this.width == 0) {
+            Log.e(TAG, "MeasuredWidth of the habitWeekView is zero! Did you call setup before the view is measured?")
         }
+
         this.habit = habit
         this.listener = listener
+        this.celebrator = celebrator
 
         addChildViews()
 
@@ -62,13 +67,14 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
 
             //add the short click listener. This only shows a toast.
             dayView.habitDayView_amount.setOnClickListener {
-                Toast.makeText(this.context, context.getString(R.string.habit_day_view_toast_long_press),Toast.LENGTH_LONG).show()
+                Toast.makeText(this.context, context.getString(R.string.habit_day_view_toast_long_press), Toast.LENGTH_LONG).show()
             }
 
             //On longclick, a timestamp is added.
             dayView.habitDayView_amount.setOnLongClickListener {
                 val newTimeStamp = HabitTimeStamp(dayView.dayStart)
                 listener.onTimestampAdded(newTimeStamp, it)
+
                 //return true to consume the touch event
                 true
             }
@@ -79,7 +85,7 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
     /**
      * This creates the child day views. The amount is dependent on the width!
      */
-    private fun addChildViews(){
+    private fun addChildViews() {
         //the amount that fit. The days view can be quite a lot smaller than 56 dp, but it looks
         //nice this way.
         val maxAmountForSpace = this.width / context.resources.getDimensionPixelSize(R.dimen.habit_day_min_width)
@@ -89,10 +95,10 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
 
         //start at the amount of days ago, and end at 1. 0 is not shown, since that is today and
         //that is already shown in the
-        for (daysAgo in amount  downTo  1) {
+        for (daysAgo in amount downTo 1) {
             //timeMillis corresponding to the amount of days ago
-            val timeMillis = TimeUtilsJvm().daysAgo( System.currentTimeMillis(), daysAgo)
-            val dayView = HabitDayView(this,habit, timeMillis, daysAgo )
+            val timeMillis = TimeUtilsJvm().daysAgo(System.currentTimeMillis(), daysAgo)
+            val dayView = HabitDayView(this.celebrator, this, habit, timeMillis, daysAgo)
 
             dayView.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f)
 
@@ -107,7 +113,7 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
     /**
      * Updates all child HabitDayViews.
      */
-    fun update() = dayViews.forEach { it.update() }
+    fun update(animate: Boolean) = dayViews.forEach { it.update(animate) }
 
 
 }

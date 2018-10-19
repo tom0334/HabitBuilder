@@ -1,11 +1,5 @@
 package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
-
-
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ValueAnimator
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -17,11 +11,9 @@ import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
 import kotlinx.android.synthetic.main.fragment_habit.*
-import nl.dionsegijn.konfetti.models.Shape
-import nl.dionsegijn.konfetti.models.Size
-import java.util.*
 
 //these are just paramms that are used for the .newinstance pattern
 private val PARAM_ONE_ID = "PARAM_1"
@@ -39,11 +31,7 @@ class HabitFrag : Fragment(), TimeStampAddListener {
 
     private lateinit var habit: Habit
     private lateinit var saver: SnappyHabitSaver
-
-    //This queue is used for the rotate animations on the amountTV. It keeps a list of animators
-    //to show after the current is played.
-    private val animationQueue = LinkedList<ValueAnimator>()
-
+    private lateinit var celebrator : CelebrationAnimationManager
 
     /**
      * Contains the initialisation code for the fragment.
@@ -66,8 +54,6 @@ class HabitFrag : Fragment(), TimeStampAddListener {
         habit.addTimeStamp(timestamp)
         saver.save(habit)
         update(true)
-        showConfettiInCenterOf(clickedView)
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +82,7 @@ class HabitFrag : Fragment(), TimeStampAddListener {
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        this.celebrator = CelebrationAnimationManager(viewKonfetti,habitFrag_rootView)
         addClickListeners()
 
         update(false)
@@ -103,23 +90,17 @@ class HabitFrag : Fragment(), TimeStampAddListener {
         //IMPORTANT: setup() is called when the view is done, so it can use the width to determine
         //the amount of habitDayViews to show
         main_habit_week_view.post {
-            main_habit_week_view.setup( this.habit, this)
+            main_habit_week_view.setup( this.habit, this, celebrator)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        //resume the animation that was paused in onPause
-        if (animationQueue.size>0){
-            animationQueue.first.pause()
-        }
+        celebrator.resume()
     }
     override fun onPause() {
         super.onPause()
-        //pause the currently running animation
-        if (animationQueue.size>0){
-            animationQueue.first.pause()
-        }
+        celebrator.pause()
     }
 
 
@@ -144,12 +125,12 @@ class HabitFrag : Fragment(), TimeStampAddListener {
 
         //Update the text of the amount tv.
         if (animate && timesToday.toString() != habitFrag_amountTv.text ) {
-            animateAmountTextAndShowConfetti(timesToday.toString())
+            celebrator.startAnimation(habitFrag_amountTv, timesToday.toString(), duration = 500)
         }else{
             habitFrag_amountTv.text = timesToday.toString()
         }
 
-        main_habit_week_view.update()
+        main_habit_week_view.update(animate)
     }
 
     /**
@@ -164,86 +145,6 @@ class HabitFrag : Fragment(), TimeStampAddListener {
         }
     }
 
-    /**
-     * This animates the change of amount. It does so with a rotation. If an animation is already
-     * playing, it will add it to the queue of animations to play. When an animation finishes it
-     * starts the next one automatically.
-     *
-     * When an animation starts playing, the confetti is also started.
-     *
-     * @param text the new text to show.
-     */
-    private fun animateAmountTextAndShowConfetti(text: String){
-        //make one full rotation
-        val anim = ValueAnimator.ofFloat(0f, 360f)
-        anim.duration = 500
-
-        anim.addUpdateListener {
-            val animatedValue  = it.animatedValue as Float
-            habitFrag_amountTv.rotationX = animatedValue
-
-            //update the text when te animation reaches halfway, so it is perfectly upside down
-            //and at maximum speed. This makes the sudden change hard to see.
-            if (it.animatedFraction>= 0.5 && habitFrag_amountTv.text != text){
-                habitFrag_amountTv.text = text
-            }
-        }
-
-        //when the animation ends, remove the current from the front, and start the one that is
-        //at the front after removal. Also show the confetti
-        anim.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                animationQueue.removeFirst()
-                if (animationQueue.size > 0) {
-                    animationQueue.first.start()
-                    showConfettiInCenterOf(habitFrag_amountTv)
-                }
-            }
-        })
-
-        //Add new animation to the queue, and play it if it is the only one.
-        animationQueue.add(anim)
-        if (animationQueue.size==1){
-            animationQueue.first.start()
-            showConfettiInCenterOf(habitFrag_amountTv)
-        }
-    }
-
-    //This shows a burts of confetti from the center of the amountTV.
-    //it is different from the one that shows confetti from the top!
-    fun showConfettiInCenterOf(centerView:View){
-
-        //Recursively finds the x location of a view relative to the habitFrag_Rootview.
-        //this 
-        fun getRelativeX(myView: View): Float {
-            return if (myView.parent === habitFrag_rootView)
-                myView.x
-            else
-                myView.x + getRelativeX(myView.parent as View)
-        }
-        //same for the y location
-        fun getRelativeY(myView: View): Float {
-            return if (myView.parent === habitFrag_rootView)
-                myView.y
-            else
-                myView.y + getRelativeY(myView.parent as View)
-        }
-
-        val centerX = getRelativeX(centerView) + centerView.width/2
-        val centerY = getRelativeY(centerView) + centerView.height/2
-
-
-        viewKonfetti.build()
-                .addColors(Color.RED, Color.GREEN, Color.MAGENTA, Color.BLUE)
-                .setDirection(0.0,360.0)
-                .setSpeed(10f, 20f)
-                .setFadeOutEnabled(true)
-                .setTimeToLive(1000L)
-                .addShapes( Shape.CIRCLE)
-                .addSizes(Size(12))
-                .setPosition(centerX,centerY)
-                .burst(200)
-    }
 
 
 }
