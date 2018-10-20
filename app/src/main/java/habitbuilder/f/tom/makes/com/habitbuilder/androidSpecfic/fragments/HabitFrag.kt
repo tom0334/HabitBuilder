@@ -1,4 +1,4 @@
-package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
+package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import habitbuilder.f.tom.makes.com.habitbuilder.*
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.PARAM_ONE_ID
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.PARAM_TWO_ID
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
@@ -15,9 +17,6 @@ import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.Celebratio
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
 import kotlinx.android.synthetic.main.fragment_habit.*
 
-//these are just paramms that are used for the .newinstance pattern
-private val PARAM_ONE_ID = "PARAM_1"
-private val PARAM_TWO_ID = "PARAM_2"
 
 /**
  * A [Fragment] subclass that will show a single habit, with some basic information on how the
