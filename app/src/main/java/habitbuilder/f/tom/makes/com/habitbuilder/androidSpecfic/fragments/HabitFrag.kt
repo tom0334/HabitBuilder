@@ -22,7 +22,8 @@ import kotlinx.android.synthetic.main.fragment_habit.*
  * A [Fragment] subclass that will show a single habit, with some basic information on how the
  * user is doing. It also lets the user add new times when the user has done the habit.
  */
-class HabitFrag : Fragment(), TimeStampAddListener {
+
+class HabitFrag : Fragment(), TimeStampAddListener{
 
     //Primitives cannot be lateinit
     //todo: see if this can be removed

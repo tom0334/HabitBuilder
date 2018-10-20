@@ -11,6 +11,7 @@
 
 
     <EditText
+        android:maxLength="15"
         android:id="@+id/createHabit_habitName"
         android:inputType="textCapWords"
         android:hint="Habit name"
@@ -53,6 +54,7 @@
             android:layout_height="wrap_content" />
 
         <EditText
+            android:maxLength="2"
             android:id="@+id/createHabit_goalEditText"
             android:inputType="number"
             android:layout_width="wrap_content"
@@ -68,6 +70,7 @@
             android:layout_height="wrap_content" />
 
         <EditText
+            android:maxLength="2"
             android:id="@+id/createHabit_goalTimespanEditText"
             android:inputType="number"
             android:gravity="center"

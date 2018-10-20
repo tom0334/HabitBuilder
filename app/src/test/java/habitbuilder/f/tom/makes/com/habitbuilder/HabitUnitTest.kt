@@ -14,7 +14,7 @@ import java.util.*
  */
 class HabitUnitTest {
 
-    var hab = Habit(HABIT_BASE_KEY + 0, "HabitName", 2)
+    lateinit var hab: Habit
 
     val orderedTestDates = listOf(
             GregorianCalendar(2018,1,4),
@@ -27,7 +27,7 @@ class HabitUnitTest {
 
     @Before
     fun prepare(){
-        hab = Habit(HABIT_BASE_KEY + 0, "HabitName", 2)
+        hab = Habit(HABIT_BASE_KEY + 0, "HabitName", 2,1)
     }
 
     //checks if the list of timestamps is in the correct order

@@ -7,13 +7,23 @@ import kotlin.math.max
 data class HabitTimeStamp(val time: Long)
 
 /**
- * A Class that represents a habit. It keeps
+ * A Class that represents a habit.
+ * @param id a random unigue string
+ * @param name the name that is given to this habit by the user
+ * @param goal the amount of times the user wants to perform this habit
+ * @param goalDays per how much days the goal needs to be reached. That is, if the user wants to
+ * do habit X 3 times every 2 weeks, goal would be equal to 3, and goalDays would be 14
+ * @param timeStamps a list of habitTimestamps of when the habit is completed
+ *
+ * todo: Look into how the goaldays amount should change the stats. Also look into unit tests for that
+ *
  */
 data class Habit(
         val id:String,
         var name: String,
         var goal: Int,
-        val positive:Boolean = true,
+        var goalDays: Int,
+        var positive:Boolean = true,
         val timeStamps: MutableList<HabitTimeStamp> = mutableListOf()
         )
 {
