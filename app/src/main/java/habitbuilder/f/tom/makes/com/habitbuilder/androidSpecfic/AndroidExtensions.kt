@@ -64,9 +64,14 @@ fun Int.toPixel(context: Context) :Int{
 }
 
 
-
-//This shows a burts of confetti from the center of the amountTV.
-//it is different from the one that shows confetti from the top!
+/**
+ * This shows a burst of confetti from the center of the centerView.
+ *
+ * @param centerView the view that should have the konfetti come from it.
+ * @param parentView the parent view that contains both the KonFettiView and the layout that contains
+ * the centerview.
+ *
+ * */
 fun KonfettiView.showConfettiInCenterWithRoot(centerView: View, parentView: View) {
 
     //Recursively finds the x location of a view relative to the habitFrag_Rootview.

@@ -48,9 +48,10 @@
 
         <Button
             style="@style/Widget.AppCompat.Button.Borderless"
+            android:textSize="18sp"
+            android:textColor="#fff"
             android:adjustViewBounds="true"
             android:background="@drawable/circle_green"
-
             android:text="34"
             android:id="@+id/habitDayView_amount"
             android:gravity="center"
