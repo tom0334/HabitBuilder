@@ -6,6 +6,16 @@
     <string name="bottom_sheet_peek_onAvgThisWeek">%1$.2f on average this week.</string>
     <string name="habit_week_view_yesterday">Yesterday</string>
     <string name="habit_day_view_toast_long_press">Press and hold to add</string>
-    <string name="createHabitFrag_goalAtLeast">My goal is at least</string>
-    <string name="createHabitFrag_GoalLessThan">My goal is less than</string>
+
+    <string name="createHabitFrag_goalAtLeast">Goal: at least</string>
+    <string name="createHabitFrag_GoalLessThan">Goal: less than</string>
+
+    <string name="createHabitFrag_toast_error_name">Name is empty!</string>
+    <string name="createHabitFrag_toast_error_goal">Invalid input in goal!</string>
+    <string name="createHabitFrag_toast_error_goalDays">Invalid input in days for goal!</string>
+    <string name="createHabit_title_new">Create Habit</string>
+    <string name="createHabit_nameHint">Habit name</string>
+    <string name="createHabit_radio_more">More is better</string>
+    <string name="createHabit_radio_less">Less is better</string>
+    <string name="createHabit_goal_inBetweenText">times every</string>
 </resources>
