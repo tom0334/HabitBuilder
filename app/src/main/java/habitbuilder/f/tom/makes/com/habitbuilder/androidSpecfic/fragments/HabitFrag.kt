@@ -115,11 +115,11 @@ class HabitFrag : Fragment(), TimeStampAddListener{
         val timesToday = habit.timesOnDay(System.currentTimeMillis(), TimeUtilsJvm())
 
         //Set the textColor for the amount TV to red or green to indicate if the goal has been reached
-        if(habit.archievedGoalOnDay(timesToday)){
-            habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal)
+        if(habit.archievedGoalInPeriod(System.currentTimeMillis(),TimeUtilsJvm())){
+            habitFrag_goalTv.text = getString(R.string.habitfrag_goalReached, habit.goal, habit.goalDays)
             habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!, R.color.my_material_green))
         }else{
-            habitFrag_goalTv.text = getString(R.string.habitfrag_goalNotReached, habit.goal)
+            habitFrag_goalTv.text = getString(R.string.habitfrag_goalNotReached, habit.goal, habit.goalDays)
             habitFrag_amountTv.setTextColor(ContextCompat.getColor(this.context!!, R.color.my_material_red))
         }
 

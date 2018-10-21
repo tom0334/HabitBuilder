@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">HabitBuilder</string>
     <string name="menu_main_create_habit">Create Habit</string>
-    <string name="habitfrag_goalReached">You reached your goal of %1$d. Amount today:</string>
-    <string name="habitfrag_goalNotReached">You did NOT reach your goal of %1$d today:</string>
+    <string name="habitfrag_goalReached">You reached your goal of %1$d each %2$d days. Amount today:</string>
+    <string name="habitfrag_goalNotReached">You did NOT reach your goal of %1$d each %2$d days. Amount today:</string>
     <string name="bottom_sheet_peek_onAvgThisWeek">%1$.2f on average this week.</string>
     <string name="habit_week_view_yesterday">Yesterday</string>
     <string name="habit_day_view_toast_long_press">Press and hold to add</string>

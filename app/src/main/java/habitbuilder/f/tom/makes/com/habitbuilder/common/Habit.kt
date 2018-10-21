@@ -28,6 +28,8 @@ data class Habit(
         )
 {
 
+    val daylyGoal:Float get() = goal.toFloat() / goalDays.toFloat()
+
     /**
      * Adds a timestamp and sorts the list of timestamps again.
      * This is NOT immediately saved in the database!
@@ -87,9 +89,23 @@ data class Habit(
      */
     fun archievedGoalOnDay(timesToday:Int):Boolean{
         if(positive){
-            return timesToday >= goal
+            return timesToday >= daylyGoal
         }else{
-            return timesToday <= goal
+            return timesToday <= daylyGoal
+        }
+    }
+
+    fun timesInGoalPeriod(end: Long,utils: TimeUtils):Int{
+        val start = utils.daysAgo(end,goalDays)
+        return timesInPeriod(start,end)
+    }
+
+    fun archievedGoalInPeriod(start:Long, utils:TimeUtils):Boolean{
+        val archieved = timesInGoalPeriod(start,utils)
+        if (positive){
+            return archieved >= goal
+        }else{
+            return archieved <= goal
         }
     }
 

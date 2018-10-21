@@ -3,6 +3,7 @@ package habitbuilder.f.tom.makes.com.habitbuilder
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.HABIT_BASE_KEY
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import org.junit.Assert
 import org.junit.Test
 
@@ -92,6 +93,26 @@ class HabitUnitTest {
         //the only timestamp is the same as the timeSince
         hab.addTimeStamp(HabitTimeStamp(lastTime))
         Assert.assertEquals(0f, hab.daysPerTimeInPeriod(lastTime,lastTime))
+    }
+
+    //Tests if the achievedGoalInPeriod properly keeps the goalDays into account the goalDays
+    @Test
+    fun testArchievedGoalInPeriodTrue(){
+        hab.goalDays = 3
+        hab.goal = 1
+
+        hab.addTimeStamp(HabitTimeStamp(firstTime))
+        Assert.assertTrue(hab.archievedGoalInPeriod(lastTime, TimeUtilsJvm()))
+    }
+
+    @Test
+    fun testArchievedGoalInPeriodFalse(){
+        hab.goalDays = 3
+        hab.goal = 2
+
+        //only add one timestamp
+        hab.addTimeStamp(HabitTimeStamp(firstTime))
+        Assert.assertFalse(hab.archievedGoalInPeriod(lastTime, TimeUtilsJvm()))
     }
 
 }
