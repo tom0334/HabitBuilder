@@ -19,8 +19,7 @@ import android.view.View
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.widget.LinearLayout
-import habitbuilder.f.tom.makes.com.habitbuilder.R.id.*
-import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.HabitCreateFrag
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.EditHabitFrag
 
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import kotlinx.android.synthetic.main.activity_main.*
@@ -161,7 +160,7 @@ class MainActivity : AppCompatActivity() , HabitCreatorListener {
      * todo: make a nice UI for this
      */
     private fun onCreateHabitClicked(){
-        val frag = HabitCreateFrag.newInstance(saver.generateNewHabitId())
+        val frag = EditHabitFrag.newInstance(saver.generateNewHabitId())
         frag.show(supportFragmentManager,"CREATE_HABIT_TAG")
     }
 
