@@ -19,21 +19,33 @@ import android.view.View
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.widget.LinearLayout
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.EditHabitFrag
+
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import kotlinx.android.synthetic.main.activity_main.*
 
+interface HabitCreatorListener{
+    fun onDone(habit:Habit?)
+}
 
 /**
  * The main activity that houses a Viewpager with a habit on every page.
  *
  * It reads the database to find the names of the habits to display them in the Tab names.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , HabitCreatorListener {
 
     private lateinit var saver: HabitDatabase
     private lateinit var adapter: HabitsPagerAdapter
 
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
+
+    override fun onDone(habit:Habit?){
+        if (habit!=null) {
+            saver.save(habit)
+        }
+        refresh()
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,13 +160,8 @@ class MainActivity : AppCompatActivity() {
      * todo: make a nice UI for this
      */
     private fun onCreateHabitClicked(){
-        val habit = Habit(
-                saver.generateNewHabitId(),
-                "Test Habit",
-                3
-        )
-        saver.save(habit)
-        refresh()
+        val frag = EditHabitFrag.newInstance(saver.generateNewHabitId())
+        frag.show(supportFragmentManager,"CREATE_HABIT_TAG")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

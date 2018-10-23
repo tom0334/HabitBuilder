@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
-import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.HabitFrag
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.HabitFrag
 
 
 class HabitsPagerAdapter(fm: FragmentManager, var data: List<Habit>): FragmentStatePagerAdapter(fm) {

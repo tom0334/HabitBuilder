@@ -9,6 +9,9 @@ import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 
+//these are just paramms that are used for the .newinstance pattern
+val PARAM_ONE_ID = "PARAM_1"
+val PARAM_TWO_ID = "PARAM_2"
 
 /**
  * This function implements one frame of a color background animation.
