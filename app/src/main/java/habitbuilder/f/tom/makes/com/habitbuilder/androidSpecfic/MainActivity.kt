@@ -24,6 +24,10 @@ import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.EditHa
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabaseInteractor
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
+
 
 /**
  * The main activity that houses a Viewpager with a habit on every page.
@@ -38,14 +42,16 @@ class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
 
-    override fun saveHabit(habit: Habit) {
-        //todo do this in the background
-        saver.save(habit)
-        refresh()
+    override fun saveHabit(habit: Habit)  {
+        launch(UI) {
+            async {
+                saver.save(habit)
+            }.await()
+            refresh()
+        }
     }
 
     override fun loadHabit(id: String): Habit {
-        //todo do this in the background
         return saver.load(id)
     }
 
@@ -152,6 +158,7 @@ class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
      * or when the name of a habit changes.
      */
     private fun refresh(){
+        //todo: look into doing this more efficiently
         val newData = saver.loadAll()
         adapter.data = newData
         adapter.notifyDataSetChanged()
