@@ -11,9 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.HabitCreatorListener
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import android.widget.Toast
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabaseInteractor
 import kotlinx.android.synthetic.main.frag_create_habit.*
 
 
@@ -44,7 +44,7 @@ class EditHabitFrag : AppCompatDialogFragment(){
 
 
     //A callback to the activity that will save the habit once it is constructed.
-    lateinit var callback: HabitCreatorListener
+    lateinit var callback: HabitDatabaseInteractor
 
     //ID of the habit. It can be a new habit that does not exist yet.
     private lateinit var habitId: String
@@ -60,10 +60,10 @@ class EditHabitFrag : AppCompatDialogFragment(){
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         callback = try{
-            context as HabitCreatorListener
+            context as HabitDatabaseInteractor
         }catch (e: ClassCastException){
             //show a more usefull error
-            throw ClassCastException(activity.toString() + " must implement HabitCreatorListener!")
+            throw ClassCastException(activity.toString() + " must implement HabitDatabaseInteractor!")
         }
     }
 
@@ -80,7 +80,7 @@ class EditHabitFrag : AppCompatDialogFragment(){
         createHabit_button_save.setOnClickListener {
             val hab = parseHabit()
             if(hab!=null){
-                callback.onDone(hab)
+                callback.saveHabit(hab)
                 dialog.dismiss()
             }
             //else the parseHabit function will show a toast indicating what the user needs
@@ -88,7 +88,6 @@ class EditHabitFrag : AppCompatDialogFragment(){
         }
 
         createHabit_button_discard.setOnClickListener {
-            callback.onDone(null)
             dialog.dismiss()
         }
 

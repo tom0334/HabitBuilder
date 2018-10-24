@@ -22,29 +22,31 @@ import android.widget.LinearLayout
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.EditHabitFrag
 
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabaseInteractor
 import kotlinx.android.synthetic.main.activity_main.*
-
-interface HabitCreatorListener{
-    fun onDone(habit:Habit?)
-}
 
 /**
  * The main activity that houses a Viewpager with a habit on every page.
  *
  * It reads the database to find the names of the habits to display them in the Tab names.
  */
-class MainActivity : AppCompatActivity() , HabitCreatorListener {
+class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
 
     private lateinit var saver: HabitDatabase
     private lateinit var adapter: HabitsPagerAdapter
 
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
-    override fun onDone(habit:Habit?){
-        if (habit!=null) {
-            saver.save(habit)
-        }
+
+    override fun saveHabit(habit: Habit) {
+        //todo do this in the background
+        saver.save(habit)
         refresh()
+    }
+
+    override fun loadHabit(id: String): Habit {
+        //todo do this in the background
+        return saver.load(id)
     }
 
 
@@ -156,8 +158,9 @@ class MainActivity : AppCompatActivity() , HabitCreatorListener {
     }
 
     /**
-     * Called when the create habbit button is clicked.  This adds a new habit and refreshes.
-     * todo: make a nice UI for this
+     * Called when the create habbit button is clicked. The fragment is a dialog where the user can
+     * create a new habit. If it is sucessful, the SaveHabit function will be called, which will save
+     * and update the UI.
      */
     private fun onCreateHabitClicked(){
         val frag = EditHabitFrag.newInstance(saver.generateNewHabitId())
