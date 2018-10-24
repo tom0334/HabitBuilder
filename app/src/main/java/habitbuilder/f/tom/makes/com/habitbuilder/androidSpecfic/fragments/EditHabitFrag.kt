@@ -55,7 +55,7 @@ class EditHabitFrag : AppCompatDialogFragment(){
     }
 
     /**
-     * Initizizes the callback for when the user is done creating a habit.
+     * Initializes the callback for when the user is done creating a habit.
      */
     override fun onAttach(context: Context?) {
         super.onAttach(context)
