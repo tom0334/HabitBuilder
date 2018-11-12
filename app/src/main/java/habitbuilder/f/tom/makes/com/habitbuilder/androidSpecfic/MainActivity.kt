@@ -35,15 +35,22 @@ import kotlinx.coroutines.experimental.launch
  * It reads the database to find the names of the habits to display them in the Tab names.
  */
 class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
+
+    private lateinit var saver: HabitDatabase
+    private lateinit var adapter: HabitsPagerAdapter
+
+    private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
+
+
     override fun saveChangesToHabit(changedHabit: Habit, nameChanged: Boolean) {
         launch {
             //this is executed on a background thread
             saver.save(changedHabit)
         }
         if (nameChanged){
-            refresh()
+            adapter.notifyDataSetChanged()
         }
-        
+
     }
 
     override fun saveNewHabit(newHabit: Habit) {
@@ -54,14 +61,9 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
                 saver.save(newHabit)
             }
             //back on UI thread
-            refresh()
+            adapter.addNewHabitAndUpdate(newHabit)
         }
     }
-
-    private lateinit var saver: HabitDatabase
-    private lateinit var adapter: HabitsPagerAdapter
-
-    private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
 
     override fun getHabit(id: String): Habit {
@@ -162,15 +164,6 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
         val scoreAllTime = habit.avgScoreAllTime(System.currentTimeMillis())
 
         bottom_sheet_peek_week_tv.text = getString(R.string.bottom_sheet_peek_onAvgThisWeek, scoreThisWeek)
-    }
-
-
-    /**
-     * Refresh the data from the database. This can be needed when a new habit is created,
-     * or when the name of a habit changes.
-     */
-    private fun refresh() {
-        adapter.notifyDataSetChanged()
     }
 
     /**

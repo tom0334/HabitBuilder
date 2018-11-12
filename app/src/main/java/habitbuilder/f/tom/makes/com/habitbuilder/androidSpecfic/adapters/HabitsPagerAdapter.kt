@@ -18,6 +18,11 @@ class HabitsPagerAdapter(fm: FragmentManager, val data: MutableList<Habit>): Fra
         return data.size
     }
 
+    fun addNewHabitAndUpdate(newHabit: Habit){
+        data.add(newHabit)
+        this.notifyDataSetChanged()
+    }
+
     override fun getPageTitle(position: Int): CharSequence? {
         return data[position].name
     }
