@@ -80,7 +80,7 @@ class EditHabitFrag : AppCompatDialogFragment(){
         createHabit_button_save.setOnClickListener {
             val hab = parseHabit()
             if(hab!=null){
-                callback.saveHabit(hab)
+                callback.saveNewHabit(hab)
                 dialog.dismiss()
             }
             //else the parseHabit function will show a toast indicating what the user needs

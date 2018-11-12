@@ -12,7 +12,6 @@ import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.PARAM_ONE_ID
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.PARAM_TWO_ID
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
-import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
@@ -54,7 +53,7 @@ class HabitFrag : Fragment(), TimeStampAddListener{
      */
     override fun onTimestampAdded(timestamp: HabitTimeStamp, clickedView: View) {
         habit.addTimeStamp(timestamp)
-        callback.saveHabit(habit)
+        callback.saveChangesToHabit(habit,false)
         update(true)
     }
 
@@ -68,7 +67,7 @@ class HabitFrag : Fragment(), TimeStampAddListener{
         this.indexInViewPager = args.getInt(PARAM_ONE_ID)
         val habitId = args.getString(PARAM_TWO_ID)
         //we can do this because onAttach is called before onCreate!
-        this.habit = callback.loadHabit(habitId)
+        this.habit = callback.getHabit(habitId)
     }
 
     /**
@@ -154,7 +153,7 @@ class HabitFrag : Fragment(), TimeStampAddListener{
     private fun addClickListeners() {
         habitFrag_justNowButton.setOnClickListener {
             habit.addTimeStamp(HabitTimeStamp(System.currentTimeMillis()))
-            callback.saveHabit(habit)
+            callback.saveChangesToHabit(habit,false)
             update(true)
         }
     }

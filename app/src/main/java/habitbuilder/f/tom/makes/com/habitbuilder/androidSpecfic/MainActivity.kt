@@ -19,13 +19,13 @@ import android.view.View
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.widget.LinearLayout
+import habitbuilder.f.tom.makes.com.habitbuilder.R.id.*
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.EditHabitFrag
 
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabaseInteractor
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 
 
@@ -34,7 +34,29 @@ import kotlinx.coroutines.experimental.launch
  *
  * It reads the database to find the names of the habits to display them in the Tab names.
  */
-class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
+class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
+    override fun saveChangesToHabit(changedHabit: Habit, nameChanged: Boolean) {
+        launch {
+            //this is executed on a background thread
+            saver.save(changedHabit)
+        }
+        if (nameChanged){
+            refresh()
+        }
+        
+    }
+
+    override fun saveNewHabit(newHabit: Habit) {
+        //do on UI thread:
+        launch(UI) {
+            launch {
+                //this is executed on a background thread
+                saver.save(newHabit)
+            }
+            //back on UI thread
+            refresh()
+        }
+    }
 
     private lateinit var saver: HabitDatabase
     private lateinit var adapter: HabitsPagerAdapter
@@ -42,16 +64,7 @@ class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
 
-    override fun saveHabit(habit: Habit)  {
-        launch(UI) {
-            async {
-                saver.save(habit)
-            }.await()
-            refresh()
-        }
-    }
-
-    override fun loadHabit(id: String): Habit {
+    override fun getHabit(id: String): Habit {
         return saver.load(id)
     }
 
@@ -66,15 +79,15 @@ class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
         this.saver = SnappyHabitSaver(this)
 
         //prepare the viewpager
-        this.adapter = HabitsPagerAdapter(this.supportFragmentManager, saver.loadAll())
+        this.adapter = HabitsPagerAdapter(this.supportFragmentManager, saver.loadAll().toMutableList())
         main_viewPager.adapter = adapter
-        main_viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+        main_viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            //todo add a fancy (fade?) animation to the text.
+                //todo add a fancy (fade?) animation to the text.
             }
 
             override fun onPageSelected(position: Int) {
@@ -135,32 +148,28 @@ class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
     /** This updates the bottom sheet when the page is scrolled.
      * @param the new page.
      */
-    private fun updateSheet(currentPage: Int){
+    private fun updateSheet(currentPage: Int) {
         val timeUtils = TimeUtilsJvm()
         //setup the text in the peek area
         val habit = adapter.getHabitForPosition(currentPage)
 
-        if (habit==null){
+        if (habit == null) {
             return
         }
 
-        val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
-        val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
+        val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(), timeUtils)
+        val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(), timeUtils)
         val scoreAllTime = habit.avgScoreAllTime(System.currentTimeMillis())
 
         bottom_sheet_peek_week_tv.text = getString(R.string.bottom_sheet_peek_onAvgThisWeek, scoreThisWeek)
     }
 
 
-
     /**
      * Refresh the data from the database. This can be needed when a new habit is created,
      * or when the name of a habit changes.
      */
-    private fun refresh(){
-        //todo: look into doing this more efficiently
-        val newData = saver.loadAll()
-        adapter.data = newData
+    private fun refresh() {
         adapter.notifyDataSetChanged()
     }
 
@@ -169,9 +178,9 @@ class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
      * create a new habit. If it is sucessful, the SaveHabit function will be called, which will save
      * and update the UI.
      */
-    private fun onCreateHabitClicked(){
+    private fun onCreateHabitClicked() {
         val frag = EditHabitFrag.newInstance(saver.generateNewHabitId())
-        frag.show(supportFragmentManager,"CREATE_HABIT_TAG")
+        frag.show(supportFragmentManager, "CREATE_HABIT_TAG")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -181,9 +190,9 @@ class MainActivity : AppCompatActivity() , HabitDatabaseInteractor {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             R.id.menu_main_create_habit -> onCreateHabitClicked()
-            else ->throw IllegalArgumentException("MainActivity: Unknown menu item clicked")
+            else -> throw IllegalArgumentException("MainActivity: Unknown menu item clicked")
         }
         return true //consume the event
     }

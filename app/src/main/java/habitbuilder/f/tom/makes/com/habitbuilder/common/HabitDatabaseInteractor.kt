@@ -6,11 +6,18 @@ package habitbuilder.f.tom.makes.com.habitbuilder.common
  */
 interface HabitDatabaseInteractor {
 
-    /**
-     * @param habit the habit that the activity should save.
-     */
-    fun saveHabit(habit: Habit)
 
+    /**
+     * Should save all changes made to this habit to the database,
+     * and update any data the activity should update.
+     */
+    fun saveChangesToHabit(changedHabit: Habit, nameChanged : Boolean)
+
+
+    /**
+     * Should save a new habit to the database and update the activity if needed.
+     */
+    fun saveNewHabit(newHabit: Habit)
 
     /**
      * This function is used to work around the fact that it is impossible to pass arguments to
@@ -18,5 +25,5 @@ interface HabitDatabaseInteractor {
      *
      * @param the id of a habit, normally passed in the newinstance of the fragment.
      */
-    fun loadHabit(id: String):Habit
+    fun getHabit(id: String):Habit
 }
