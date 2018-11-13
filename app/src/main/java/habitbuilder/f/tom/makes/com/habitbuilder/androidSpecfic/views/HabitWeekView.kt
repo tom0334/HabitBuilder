@@ -5,13 +5,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import habitbuilder.f.tom.makes.com.habitbuilder.R
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
-import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
-import kotlinx.android.synthetic.main.habit_day_view.view.*
 import kotlin.math.min
 
 /**
@@ -58,31 +55,14 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
         this.listener = listener
         this.celebrator = celebrator
 
-        addChildViews()
-
-        for (dayView in dayViews) {
-
-            //add the short click listener. This only shows a toast.
-            dayView.habitDayView_amount.setOnClickListener {
-                Toast.makeText(this.context, context.getString(R.string.habit_day_view_toast_long_press), Toast.LENGTH_LONG).show()
-            }
-
-            //On longclick, a timestamp is added.
-            dayView.habitDayView_amount.setOnLongClickListener {
-                val newTimeStamp = HabitTimeStamp(dayView.dayStart)
-                listener.onTimestampAdded(newTimeStamp, it)
-
-                //return true to consume the touch event
-                true
-            }
-        }
+        addChildViews(listener)
     }
 
 
     /**
      * This creates the child day views. The amount is dependent on the width!
      */
-    private fun addChildViews() {
+    private fun addChildViews(listener: TimeStampAddListener) {
         //the amount that fit. The days view can be quite a lot smaller than 56 dp, but it looks
         //nice this way.
         val maxAmountForSpace = this.width / context.resources.getDimensionPixelSize(R.dimen.habit_day_min_width)
@@ -95,7 +75,7 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
         for (daysAgo in amount downTo 1) {
             //timeMillis corresponding to the amount of days ago
             val timeMillis = TimeUtilsJvm().daysAgo(System.currentTimeMillis(), daysAgo)
-            val dayView = HabitDayView(this.celebrator, this, habit, timeMillis, daysAgo)
+            val dayView = HabitDayView(this.context,listener,habit,timeMillis,celebrator, , showDayOfWeek = true, isYesterday = daysAgo==1)
 
             dayView.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f)
 

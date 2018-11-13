@@ -2,32 +2,53 @@ package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
-import android.widget.TextView
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
+import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 
 class HabitMonthView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
-    fun setup(){
+    private val TAG = "HabitMonthView"
+
+    private lateinit var listener: TimeStampAddListener
+    private lateinit var habit: Habit
+    //lateInit is not allowed on primitives
+    private var montsAgoFromNow: Int = 0
+
+    private var celebrator: CelebrationAnimationManager? = null
+
+
+
+    fun setup(monthsAgoFromNow: Int, habit: Habit, listener: TimeStampAddListener, celebrator: CelebrationAnimationManager?){
+        if (this.width == 0) {
+            Log.e(TAG, "MeasuredWidth of the habitWeekView is zero! Did you call setup before the view is measured?")
+        }
+
+        this.habit = habit
+        this.listener = listener
+        this.celebrator = celebrator
 
         this.orientation = LinearLayout.VERTICAL
-
-        //todo make this dynamic
-        val time = System.currentTimeMillis()
+        this.montsAgoFromNow = monthsAgoFromNow
 
         val utils = TimeUtilsJvm()
-        val daysToSkipOnFirstWeek = utils.dayNumOfFirstDayInMoth(time)
-        val daysInMonth = utils.daysInMonth(time)
+
+        val timeAtStartOfMonth = utils.timeAtStartOfCertainDayInMonth(System.currentTimeMillis(), monthsAgoFromNow,1)
+
+        val daysToSkipOnFirstWeek = utils.dayNumOfFirstDayInMoth(timeAtStartOfMonth)
+        val daysInMonth = utils.daysInMonth(timeAtStartOfMonth)
         addChildViews(daysToSkipOnFirstWeek, daysInMonth)
     }
 
     /**
      * Adds all the habitDayViews to this MonthView, according to the specifics of the month
      * @param daysInMonth the amount of days in this month
-     * @param
+     * @param daysToSkipOnFirstWeek the amount of days in the first week that were in the last month
      */
     private fun addChildViews(daysToSkipOnFirstWeek: Int, daysInMonth: Int) {
         fun createDummyView():View{
@@ -56,10 +77,7 @@ class HabitMonthView(context: Context?, attrs: AttributeSet?) : LinearLayout(con
             if (rows[rowNum].childCount==7){
                 rowNum++
             }
-            //todo make it show an actual habitDayView
-            val actualView = TextView(context)
-            actualView.layoutParams = LinearLayout.LayoutParams(0,WRAP_CONTENT,1.0f)
-            actualView.text = i.toString()
+            val actualView = createDayView(i)
             rows[rowNum].addView(actualView)
         }
 
@@ -69,6 +87,15 @@ class HabitMonthView(context: Context?, attrs: AttributeSet?) : LinearLayout(con
         }
 
         rows.forEach {this.addView(it)}
+    }
+
+
+    private fun createDayView(dayOfMonth: Int): HabitDayView{
+        val utils = TimeUtilsJvm()
+        val dayStart = utils.timeAtStartOfCertainDayInMonth(System.currentTimeMillis(),this.montsAgoFromNow,dayOfMonth)
+        val actualView = HabitDayView(this.context,listener,habit, dayStart, null)
+        actualView.layoutParams = LinearLayout.LayoutParams(0,WRAP_CONTENT,1.0f)
+        return actualView
     }
 
 }

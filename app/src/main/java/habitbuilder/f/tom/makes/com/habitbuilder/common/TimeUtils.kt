@@ -36,5 +36,8 @@ abstract class TimeUtils{
 
     //returns the amount of days in the month given by the current time millis
     abstract fun daysInMonth(currentTimeMillis: Long): Int
+
+    //returns the time at the start of day x in the month of timeAtStartOfMonth
+    abstract fun timeAtStartOfCertainDayInMonth(currentTime: Long, monthsAgo: Int, dayOfMonth: Int): Long
 }
 

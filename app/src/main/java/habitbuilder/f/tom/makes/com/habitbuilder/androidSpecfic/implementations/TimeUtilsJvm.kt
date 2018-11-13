@@ -13,6 +13,22 @@ val SECONDS_IN_DAY = 86400
  */
 class TimeUtilsJvm: TimeUtils() {
 
+    override fun timeAtStartOfCertainDayInMonth(currentTime: Long, monthsAgo: Int, dayOfMonth: Int): Long {
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = currentTime
+
+        cal.add(Calendar.MONTH, - monthsAgo)
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+        //set the time to the start of the day
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+
+        return cal.timeInMillis
+    }
+
+
     override fun daysInMonth(currentTimeMillis: Long): Int {
         val cal = Calendar.getInstance()
         cal.timeInMillis = currentTimeMillis

@@ -19,11 +19,12 @@ import android.view.View
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.widget.LinearLayout
-import habitbuilder.f.tom.makes.com.habitbuilder.R.id.*
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.EditHabitFrag
 
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabaseInteractor
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -34,7 +35,7 @@ import kotlinx.coroutines.experimental.launch
  *
  * It reads the database to find the names of the habits to display them in the Tab names.
  */
-class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
+class MainActivity : AppCompatActivity(), HabitDatabaseInteractor, TimeStampAddListener {
 
     private lateinit var saver: HabitDatabase
     private lateinit var adapter: HabitsPagerAdapter
@@ -42,6 +43,9 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
 
+    override fun onTimestampAdded(timestamp: HabitTimeStamp, clickedView: View) {
+        //todo implement this! Currently the timestamps added in the habitMonthViews are not saved!
+    }
     /**
      * Saves CHANGES to a habit, does NOT save a new habit!
      *
@@ -152,7 +156,8 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
 
         })
 
-        bottom_sheet_month_view.setup()
+        val currentHabit = adapter.getHabitForPosition(main_viewPager.currentItem)
+        bottom_sheet_month_view.setup(0,currentHabit!!,this,null)
 
         //Setup the button that expands the sheet.
         with(sheetBehavior) {
