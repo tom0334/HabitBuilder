@@ -42,6 +42,13 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
 
+    /**
+     * Saves CHANGES to a habit, does NOT save a new habit!
+     *
+     * @param changedHabit the habit that was changed.
+     * @param nameChanged if the name of the habit was changed. This is determines wheter the
+     * tabs at the top need to be refreshed. This isn't always refreshed for performance reasons.
+     */
     override fun saveChangesToHabit(changedHabit: Habit, nameChanged: Boolean) {
         launch {
             //this is executed on a background thread
@@ -53,6 +60,11 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
 
     }
 
+    /**
+     * Saves a new habit to the database, and then refreshes the adapter. Called when the
+     * NewHabitFragment is closed.
+     * @param newHabit a new habit that needs to be saved to the database.
+     */
     override fun saveNewHabit(newHabit: Habit) {
         //do on UI thread:
         launch(UI) {
@@ -65,7 +77,11 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
         }
     }
 
-
+    /**
+     * Returns a habit from the database, called from the fragments. This function avoids having
+     * the fragment load the habit from the database again. (this activity needs access to the
+     * fragments as wel, to figure out the titles for the tabs).
+     */
     override fun getHabit(id: String): Habit {
         return saver.load(id)
     }
@@ -167,27 +183,33 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
     }
 
     /**
-     * Called when the create habbit button is clicked. The fragment is a dialog where the user can
-     * create a new habit. If it is sucessful, the SaveHabit function will be called, which will save
-     * and update the UI.
+     * Creates the options menu (three dots in the actionbar) from xml.
      */
-    private fun onCreateHabitClicked() {
-        val frag = EditHabitFrag.newInstance(saver.generateNewHabitId())
-        frag.show(supportFragmentManager, "CREATE_HABIT_TAG")
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
+    /**
+     * Called when a button in the options menu is clicked.
+     */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_main_create_habit -> onCreateHabitClicked()
             else -> throw IllegalArgumentException("MainActivity: Unknown menu item clicked")
         }
         return true //consume the event
+    }
+
+    /**
+     * Called when the create habbit button is clicked. The fragment is a dialog where the user can
+     * create a new habit. If it is successful, the SaveHabit function will be called, which will save
+     * and update the UI.
+     */
+    private fun onCreateHabitClicked() {
+        val frag = EditHabitFrag.newInstance(saver.generateNewHabitId())
+        frag.show(supportFragmentManager, "CREATE_HABIT_TAG")
     }
 
     override fun onDestroy() {
