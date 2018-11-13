@@ -149,7 +149,10 @@ class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
                 main_toggle_sheet_button.rotation = slideOffset * 180
                 main_content.transitionBackGroundColor(slideOffset, R.color.colorNormal, R.color.colorFaded)
             }
+
         })
+
+        bottom_sheet_month_view.setup()
 
         //Setup the button that expands the sheet.
         with(sheetBehavior) {

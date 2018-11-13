@@ -56,6 +56,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
+            <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitMonthView
+                android:id="@+id/bottom_sheet_month_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <TextView
                 android:text="Graph place holder"
                 android:layout_width="match_parent"

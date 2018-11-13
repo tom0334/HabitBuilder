@@ -28,5 +28,13 @@ abstract class TimeUtils{
     abstract fun oneDayAgo(time:Long): Long
 
     abstract fun daysAgo(timeNow: Long, days: Int): Long
+
+    //returns the num of the day of the week, starting at 0.
+    //that is, if the first day of the month is a monday, this function should return 0.
+    //if it is a sunday it should return 6.
+    abstract fun dayNumOfFirstDayInMoth(timeInMonth: Long): Int
+
+    //returns the amount of days in the month given by the current time millis
+    abstract fun daysInMonth(currentTimeMillis: Long): Int
 }
 
