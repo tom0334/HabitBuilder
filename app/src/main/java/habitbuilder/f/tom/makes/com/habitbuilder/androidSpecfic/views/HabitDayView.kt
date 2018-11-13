@@ -3,7 +3,6 @@ package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views
 import android.view.View
 import android.widget.LinearLayout
 import habitbuilder.f.tom.makes.com.habitbuilder.R
-import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.HabitWeekView
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit

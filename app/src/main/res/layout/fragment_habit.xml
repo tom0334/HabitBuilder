@@ -50,7 +50,7 @@
             android:text="16" />
 
 
-        <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.HabitWeekView
+        <habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitWeekView
             android:id="@+id/main_habit_week_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

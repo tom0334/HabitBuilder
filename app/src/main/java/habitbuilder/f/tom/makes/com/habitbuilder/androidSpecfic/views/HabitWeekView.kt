@@ -1,17 +1,14 @@
-package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
+package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views
 
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import habitbuilder.f.tom.makes.com.habitbuilder.R
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
-import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.HabitDayView
-import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
 import kotlinx.android.synthetic.main.habit_day_view.view.*
