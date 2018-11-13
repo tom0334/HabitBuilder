@@ -31,15 +31,17 @@ class HabitDayView(context: Context,
                    private val habit: Habit,
                    private val dayStart: Long,
                    private val celebrator: CelebrationAnimationManager? = null,
-                   private val showDayOfWeek:Boolean = false,
+                   private val showDayOfWeek: Boolean = false,
                    private val isYesterday: Boolean = false
-)
-    : LinearLayout(context) {
+) : LinearLayout(context) {
 
+    /**
+     * Initializes a HabitDayView, and its clickListeners. Note that the listeners may be disabled
+     * because the view button view is disabled. That happens when a dayView is for a day that is in
+     * the future.
+     */
     init {
         View.inflate(context, R.layout.habit_day_view, this)
-        update(false)
-
 
         //add the short click listener. This only shows a toast.
         this.habitDayView_amount.setOnClickListener {
@@ -55,6 +57,7 @@ class HabitDayView(context: Context,
             true
         }
 
+        update(false)
     }
 
     /**
@@ -64,9 +67,9 @@ class HabitDayView(context: Context,
      * @param animate if the celebrator animation should be started.
      */
     fun update(animate: Boolean) {
-        val timeUtils = TimeUtilsJvm()
-        val date = Date(dayStart)
+        val utils = TimeUtilsJvm()
 
+        val date = Date(dayStart)
         habitDayView_day_of_week.visibility = if (showDayOfWeek) View.VISIBLE else View.GONE
 
         if (this.isYesterday) {
@@ -77,8 +80,24 @@ class HabitDayView(context: Context,
 
         habitDayView_date.text = SimpleDateFormat("dd-MMM").format(date)
 
+
+        val enabled = utils.timeAtStartOfDay(System.currentTimeMillis()) > this.dayStart
+
+        //updates the button state.
+        habitDayView_amount.isEnabled = enabled
+        if(enabled){
+            this.showEnabledAmountButton(animate)
+        }else{
+            showDisabledAmountButton()
+        }
+    }
+
+    /**
+     * Shows an enabled state for a date that is before the current date.
+     */
+    private fun showEnabledAmountButton(animate: Boolean) {
         //find the number today
-        val timesToday = habit.timesOnDay(dayStart, timeUtils)
+        val timesToday = habit.timesOnDay(dayStart, TimeUtilsJvm())
 
         if (animate && habitDayView_amount.text != timesToday.toString()) {
             celebrator?.startAnimation(habitDayView_amount, timesToday.toString(), 500)
@@ -89,8 +108,16 @@ class HabitDayView(context: Context,
         //show the background color, coreresponding to wheter the goal was reached
         habitDayView_amount.background = if (habit.archievedGoalOnDay(timesToday)) context.getDrawable(R.drawable.circle_green)
         else context.getDrawable(R.drawable.circle_red)
-
     }
 
+    /**
+     * Show a disables state for a day that is after the current state. These are for days that cannot
+     * be filled in yet.
+     */
+    private fun showDisabledAmountButton(){
+        habitDayView_amount.text = ""
+        habitDayView_amount.background = context.getDrawable(R.drawable.circle_disabled)
+
+    }
 
 }

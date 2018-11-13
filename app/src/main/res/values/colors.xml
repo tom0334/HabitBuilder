@@ -9,4 +9,5 @@
 
     <color name="my_material_red">#B71C1C</color>
     <color name="my_material_green">#1B5E20</color>
+    <color name="disabled">#9F9F9F</color>
 </resources>

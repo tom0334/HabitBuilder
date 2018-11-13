@@ -19,6 +19,7 @@ class HabitMonthView(context: Context?, attrs: AttributeSet?) : LinearLayout(con
     private lateinit var habit: Habit
     //lateInit is not allowed on primitives
     private var montsAgoFromNow: Int = 0
+    private val dayViews = mutableListOf<HabitDayView>()
 
     private var celebrator: CelebrationAnimationManager? = null
 
@@ -95,7 +96,10 @@ class HabitMonthView(context: Context?, attrs: AttributeSet?) : LinearLayout(con
         val dayStart = utils.timeAtStartOfCertainDayInMonth(System.currentTimeMillis(),this.montsAgoFromNow,dayOfMonth)
         val actualView = HabitDayView(this.context,listener,habit, dayStart, null)
         actualView.layoutParams = LinearLayout.LayoutParams(0,WRAP_CONTENT,1.0f)
+        dayViews.add(actualView)
         return actualView
     }
+
+    private fun update(animate: Boolean) = dayViews.forEach{it.update(animate)}
 
 }

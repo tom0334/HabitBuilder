@@ -75,7 +75,7 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
         for (daysAgo in amount downTo 1) {
             //timeMillis corresponding to the amount of days ago
             val timeMillis = TimeUtilsJvm().daysAgo(System.currentTimeMillis(), daysAgo)
-            val dayView = HabitDayView(this.context,listener,habit,timeMillis,celebrator, , showDayOfWeek = true, isYesterday = daysAgo==1)
+            val dayView = HabitDayView(this.context,listener,habit,timeMillis,celebrator, showDayOfWeek = true, isYesterday = daysAgo==1)
 
             dayView.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f)
 
