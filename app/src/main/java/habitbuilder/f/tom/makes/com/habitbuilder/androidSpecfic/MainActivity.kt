@@ -19,32 +19,71 @@ import android.view.View
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.widget.LinearLayout
+import habitbuilder.f.tom.makes.com.habitbuilder.R.id.*
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.EditHabitFrag
 
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabaseInteractor
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
-interface HabitCreatorListener{
-    fun onDone(habit:Habit?)
-}
 
 /**
  * The main activity that houses a Viewpager with a habit on every page.
  *
  * It reads the database to find the names of the habits to display them in the Tab names.
  */
-class MainActivity : AppCompatActivity() , HabitCreatorListener {
+class MainActivity : AppCompatActivity(), HabitDatabaseInteractor {
 
     private lateinit var saver: HabitDatabase
     private lateinit var adapter: HabitsPagerAdapter
 
     private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
-    override fun onDone(habit:Habit?){
-        if (habit!=null) {
-            saver.save(habit)
+
+    /**
+     * Saves CHANGES to a habit, does NOT save a new habit!
+     *
+     * @param changedHabit the habit that was changed.
+     * @param nameChanged if the name of the habit was changed. This is determines wheter the
+     * tabs at the top need to be refreshed. This isn't always refreshed for performance reasons.
+     */
+    override fun saveChangesToHabit(changedHabit: Habit, nameChanged: Boolean) {
+        launch {
+            //this is executed on a background thread
+            saver.save(changedHabit)
         }
-        refresh()
+        if (nameChanged){
+            adapter.notifyDataSetChanged()
+        }
+
+    }
+
+    /**
+     * Saves a new habit to the database, and then refreshes the adapter. Called when the
+     * NewHabitFragment is closed.
+     * @param newHabit a new habit that needs to be saved to the database.
+     */
+    override fun saveNewHabit(newHabit: Habit) {
+        //do on UI thread:
+        launch(UI) {
+            launch {
+                //this is executed on a background thread
+                saver.save(newHabit)
+            }
+            //back on UI thread
+            adapter.addNewHabitAndUpdate(newHabit)
+        }
+    }
+
+    /**
+     * Returns a habit from the database, called from the fragments. This function avoids having
+     * the fragment load the habit from the database again. (this activity needs access to the
+     * fragments as wel, to figure out the titles for the tabs).
+     */
+    override fun getHabit(id: String): Habit {
+        return saver.load(id)
     }
 
 
@@ -58,15 +97,15 @@ class MainActivity : AppCompatActivity() , HabitCreatorListener {
         this.saver = SnappyHabitSaver(this)
 
         //prepare the viewpager
-        this.adapter = HabitsPagerAdapter(this.supportFragmentManager, saver.loadAll())
+        this.adapter = HabitsPagerAdapter(this.supportFragmentManager, saver.loadAll().toMutableList())
         main_viewPager.adapter = adapter
-        main_viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+        main_viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            //todo add a fancy (fade?) animation to the text.
+                //todo add a fancy (fade?) animation to the text.
             }
 
             override fun onPageSelected(position: Int) {
@@ -127,55 +166,50 @@ class MainActivity : AppCompatActivity() , HabitCreatorListener {
     /** This updates the bottom sheet when the page is scrolled.
      * @param the new page.
      */
-    private fun updateSheet(currentPage: Int){
+    private fun updateSheet(currentPage: Int) {
         val timeUtils = TimeUtilsJvm()
         //setup the text in the peek area
         val habit = adapter.getHabitForPosition(currentPage)
 
-        if (habit==null){
+        if (habit == null) {
             return
         }
 
-        val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(),timeUtils)
-        val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(),timeUtils)
+        val scoreThisWeek = habit.avgScoreThisWeek(System.currentTimeMillis(), timeUtils)
+        val scoreThisMonth = habit.avgScoreThisMonth(System.currentTimeMillis(), timeUtils)
         val scoreAllTime = habit.avgScoreAllTime(System.currentTimeMillis())
 
         bottom_sheet_peek_week_tv.text = getString(R.string.bottom_sheet_peek_onAvgThisWeek, scoreThisWeek)
     }
 
-
-
     /**
-     * Refresh the data from the database. This can be needed when a new habit is created,
-     * or when the name of a habit changes.
+     * Creates the options menu (three dots in the actionbar) from xml.
      */
-    private fun refresh(){
-        val newData = saver.loadAll()
-        adapter.data = newData
-        adapter.notifyDataSetChanged()
-    }
-
-    /**
-     * Called when the create habbit button is clicked.  This adds a new habit and refreshes.
-     * todo: make a nice UI for this
-     */
-    private fun onCreateHabitClicked(){
-        val frag = EditHabitFrag.newInstance(saver.generateNewHabitId())
-        frag.show(supportFragmentManager,"CREATE_HABIT_TAG")
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
+    /**
+     * Called when a button in the options menu is clicked.
+     */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             R.id.menu_main_create_habit -> onCreateHabitClicked()
-            else ->throw IllegalArgumentException("MainActivity: Unknown menu item clicked")
+            else -> throw IllegalArgumentException("MainActivity: Unknown menu item clicked")
         }
         return true //consume the event
+    }
+
+    /**
+     * Called when the create habbit button is clicked. The fragment is a dialog where the user can
+     * create a new habit. If it is successful, the SaveHabit function will be called, which will save
+     * and update the UI.
+     */
+    private fun onCreateHabitClicked() {
+        val frag = EditHabitFrag.newInstance(saver.generateNewHabitId())
+        frag.show(supportFragmentManager, "CREATE_HABIT_TAG")
     }
 
     override fun onDestroy() {

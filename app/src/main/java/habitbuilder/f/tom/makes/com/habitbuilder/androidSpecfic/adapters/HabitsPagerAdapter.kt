@@ -7,7 +7,7 @@ import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments.HabitFrag
 
 
-class HabitsPagerAdapter(fm: FragmentManager, var data: List<Habit>): FragmentStatePagerAdapter(fm) {
+class HabitsPagerAdapter(fm: FragmentManager, val data: MutableList<Habit>): FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         assert(position in data.indices)
@@ -16,6 +16,11 @@ class HabitsPagerAdapter(fm: FragmentManager, var data: List<Habit>): FragmentSt
 
     override fun getCount(): Int {
         return data.size
+    }
+
+    fun addNewHabitAndUpdate(newHabit: Habit){
+        data.add(newHabit)
+        this.notifyDataSetChanged()
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

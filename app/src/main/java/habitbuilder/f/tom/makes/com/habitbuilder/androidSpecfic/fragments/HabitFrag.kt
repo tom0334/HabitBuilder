@@ -1,5 +1,6 @@
 package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -11,10 +12,10 @@ import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.PARAM_ONE_ID
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.PARAM_TWO_ID
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
 import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitTimeStamp
-import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.SnappyHabitSaver
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views.TimeStampAddListener
+import habitbuilder.f.tom.makes.com.habitbuilder.common.HabitDatabaseInteractor
 import kotlinx.android.synthetic.main.fragment_habit.*
 
 
@@ -30,8 +31,8 @@ class HabitFrag : Fragment(), TimeStampAddListener{
     private var indexInViewPager: Int = -1
 
     private lateinit var habit: Habit
-    private lateinit var saver: SnappyHabitSaver
     private lateinit var celebrator : CelebrationAnimationManager
+    private lateinit var callback: HabitDatabaseInteractor
 
     /**
      * Contains the initialisation code for the fragment.
@@ -52,9 +53,10 @@ class HabitFrag : Fragment(), TimeStampAddListener{
      */
     override fun onTimestampAdded(timestamp: HabitTimeStamp, clickedView: View) {
         habit.addTimeStamp(timestamp)
-        saver.save(habit)
+        callback.saveChangesToHabit(habit,false)
         update(true)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,9 +66,21 @@ class HabitFrag : Fragment(), TimeStampAddListener{
         val args:Bundle = arguments!!
         this.indexInViewPager = args.getInt(PARAM_ONE_ID)
         val habitId = args.getString(PARAM_TWO_ID)
-        this.saver = SnappyHabitSaver(activity!!)
-        this.habit = saver.load(habitId)
+        //we can do this because onAttach is called before onCreate!
+        this.habit = callback.getHabit(habitId)
+    }
 
+    /**
+     * Initializes the callback for when the user is done creating a habit.
+     */
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        callback = try{
+            context as HabitDatabaseInteractor
+        }catch (e: ClassCastException){
+            //show a more usefull error
+            throw ClassCastException(activity.toString() + " must implement HabitDatabaseInteractor!")
+        }
     }
 
 
@@ -139,8 +153,7 @@ class HabitFrag : Fragment(), TimeStampAddListener{
     private fun addClickListeners() {
         habitFrag_justNowButton.setOnClickListener {
             habit.addTimeStamp(HabitTimeStamp(System.currentTimeMillis()))
-            //todo save the habit in a background thread to get rid of the lagspike in the animation
-            saver.save(habit)
+            callback.saveChangesToHabit(habit,false)
             update(true)
         }
     }
