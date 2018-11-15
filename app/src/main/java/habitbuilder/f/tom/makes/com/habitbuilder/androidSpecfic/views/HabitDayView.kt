@@ -30,6 +30,7 @@ class HabitDayView(context: Context,
                    private val listener: TimeStampAddListener,
                    private val habit: Habit,
                    private val dayStart: Long,
+                   private val dateFormat: SimpleDateFormat,
                    private val celebrator: CelebrationAnimationManager? = null,
                    private val showDayOfWeek: Boolean = false,
                    private val isYesterday: Boolean = false
@@ -75,10 +76,11 @@ class HabitDayView(context: Context,
         if (this.isYesterday) {
             habitDayView_day_of_week.text = context.getString(R.string.habit_week_view_yesterday)
         } else {
+            //EEE means day of the week, so 'Monday' for example.
             habitDayView_day_of_week.text = SimpleDateFormat("EEE").format(date)
         }
 
-        habitDayView_date.text = SimpleDateFormat("dd-MMM").format(date)
+        habitDayView_date.text = this.dateFormat.format(date)
 
 
         val enabled = utils.timeAtStartOfDay(System.currentTimeMillis()) > this.dayStart

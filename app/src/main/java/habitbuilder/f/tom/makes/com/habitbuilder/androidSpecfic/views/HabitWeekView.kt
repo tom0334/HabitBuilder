@@ -9,6 +9,7 @@ import habitbuilder.f.tom.makes.com.habitbuilder.R
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
+import java.text.SimpleDateFormat
 import kotlin.math.min
 
 /**
@@ -69,13 +70,13 @@ class HabitWeekView(context: Context?, attrs: AttributeSet?) : LinearLayout(cont
 
         val amount = min(maxAmountForSpace, 7)
 
-
+        val dateFormat = SimpleDateFormat("dd-MMM")
         //start at the amount of days ago, and end at 1. 0 is not shown, since that is today and
         //that is already shown in the
         for (daysAgo in amount downTo 1) {
             //timeMillis corresponding to the amount of days ago
             val timeMillis = TimeUtilsJvm().daysAgo(System.currentTimeMillis(), daysAgo)
-            val dayView = HabitDayView(this.context,listener,habit,timeMillis,celebrator, showDayOfWeek = true, isYesterday = daysAgo==1)
+            val dayView = HabitDayView(this.context,listener,habit,timeMillis,dateFormat, showDayOfWeek = true, isYesterday = daysAgo==1)
 
             dayView.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f)
 

@@ -1,15 +1,25 @@
 package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.views
 
 import android.content.Context
+import android.graphics.Typeface
+import android.text.Layout
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
+import android.widget.TextView
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.implementations.TimeUtilsJvm
 import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.utils.CelebrationAnimationManager
 import habitbuilder.f.tom.makes.com.habitbuilder.common.Habit
+import java.text.SimpleDateFormat
+import java.util.*
+import android.view.Gravity
+import habitbuilder.f.tom.makes.com.habitbuilder.R
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.pad
+import habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic.toPixel
+
 
 class HabitMonthView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
@@ -40,10 +50,43 @@ class HabitMonthView(context: Context?, attrs: AttributeSet?) : LinearLayout(con
         val utils = TimeUtilsJvm()
 
         val timeAtStartOfMonth = utils.timeAtStartOfCertainDayInMonth(System.currentTimeMillis(), monthsAgoFromNow,1)
-
+        addTitles(timeAtStartOfMonth)
         val daysToSkipOnFirstWeek = utils.dayNumOfFirstDayInMoth(timeAtStartOfMonth)
         val daysInMonth = utils.daysInMonth(timeAtStartOfMonth)
         addChildViews(daysToSkipOnFirstWeek, daysInMonth)
+    }
+
+    /**
+     * Adds the month name and the days of the week. It does so programmaticly, as the xml would be
+     * fairly repetitive.
+     * @param timeAtStartOfMonth the time at the start of the month, used to find the name of the
+     * month.
+     */
+    private fun addTitles(timeAtStartOfMonth: Long) {
+        val monthName = TextView(this.context)
+        val date = Date(timeAtStartOfMonth)
+        monthName.text = SimpleDateFormat("MMMM").format(date).capitalize()
+        monthName.gravity = Gravity.CENTER_HORIZONTAL
+        monthName.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+        this.addView(monthName)
+
+        //add the days
+        val horizontalLayout = LinearLayout(context)
+        horizontalLayout.pad(top = 16.toPixel(context))
+
+        horizontalLayout.layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        val days = resources.getStringArray(R.array.days_of_the_week)
+        for (day in days){
+            val tv = TextView(context)
+            tv.layoutParams = LayoutParams(0, WRAP_CONTENT,1.0f)
+            tv.gravity = Gravity.CENTER_HORIZONTAL
+            tv.text = day
+            horizontalLayout.addView(tv)
+        }
+        this.addView(horizontalLayout)
+
+
+
     }
 
     /**
@@ -92,9 +135,10 @@ class HabitMonthView(context: Context?, attrs: AttributeSet?) : LinearLayout(con
 
 
     private fun createDayView(dayOfMonth: Int): HabitDayView{
+        val dateFormat = SimpleDateFormat("d")
         val utils = TimeUtilsJvm()
         val dayStart = utils.timeAtStartOfCertainDayInMonth(System.currentTimeMillis(),this.montsAgoFromNow,dayOfMonth)
-        val actualView = HabitDayView(this.context,listener,habit, dayStart, null)
+        val actualView = HabitDayView(this.context,listener,habit, dayStart, dateFormat)
         actualView.layoutParams = LinearLayout.LayoutParams(0,WRAP_CONTENT,1.0f)
         dayViews.add(actualView)
         return actualView

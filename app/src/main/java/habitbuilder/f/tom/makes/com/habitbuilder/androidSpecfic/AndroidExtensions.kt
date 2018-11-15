@@ -1,6 +1,7 @@
 package habitbuilder.f.tom.makes.com.habitbuilder.androidSpecfic
 
 import android.content.Context
+import android.drm.DrmRights
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.util.TypedValue
@@ -23,7 +24,7 @@ val PARAM_TWO_ID = "PARAM_2"
  * @param colorToId the resource ID(!) of the color to show at 100% animation
  *
  */
-fun View.transitionBackGroundColor(progress : Float, colorFromId:Int, colorToId: Int) {
+fun View.transitionBackGroundColor(progress: Float, colorFromId: Int, colorToId: Int) {
     /**
      * This function returns the calculated in-between value for a color
      * given integers that represent the start and end values in the four
@@ -60,10 +61,21 @@ fun View.transitionBackGroundColor(progress : Float, colorFromId:Int, colorToId:
     this.setBackgroundColor(interpolateColor(progress, colorFrom, colorTo))
 }
 
-fun Int.toPixel(context: Context) :Int{
+/**
+ * Helper function that lets you only set a specific side, without changing the rest of the paddings.
+ */
+fun View.pad(left: Int = this.paddingLeft,
+                    top: Int = this.paddingTop,
+                    right: Int = this.paddingBottom,
+                    bottom: Int = this.paddingBottom) {
+    this.setPadding(left, top, right, bottom)
+}
+
+
+fun Int.toPixel(context: Context): Int {
     val r = context.resources
-    val pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,this.toFloat(), r.getDisplayMetrics())
-    return  pixels.toInt()
+    val pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), r.getDisplayMetrics())
+    return pixels.toInt()
 }
 
 

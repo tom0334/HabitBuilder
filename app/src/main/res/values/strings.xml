@@ -18,4 +18,16 @@
     <string name="createHabit_radio_more">More is better</string>
     <string name="createHabit_radio_less">Less is better</string>
     <string name="createHabit_goal_inBetweenText">times every</string>
+
+
+    <string-array name="days_of_the_week">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+
 </resources>
